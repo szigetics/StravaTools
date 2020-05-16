@@ -17,6 +17,10 @@
 		9908F51C246FDBA200ECF7D3 /* StravaToolsUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9908F51B246FDBA200ECF7D3 /* StravaToolsUITests.swift */; };
 		9908F52B246FDC5F00ECF7D3 /* StravaAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9908F52A246FDC5F00ECF7D3 /* StravaAPIClient.swift */; };
 		9908F52E246FDD3800ECF7D3 /* OAuth2 in Frameworks */ = {isa = PBXBuildFile; productRef = 9908F52D246FDD3800ECF7D3 /* OAuth2 */; };
+		9908F531246FDFB500ECF7D3 /* strava.clientID in Resources */ = {isa = PBXBuildFile; fileRef = 9908F52F246FDFB500ECF7D3 /* strava.clientID */; };
+		9908F532246FDFB500ECF7D3 /* strava.clientSecret in Resources */ = {isa = PBXBuildFile; fileRef = 9908F530246FDFB500ECF7D3 /* strava.clientSecret */; };
+		9908F537246FE39F00ECF7D3 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9908F535246FE39F00ECF7D3 /* LoginViewController.swift */; };
+		9908F538246FE39F00ECF7D3 /* LoginViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9908F536246FE39F00ECF7D3 /* LoginViewController.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -52,6 +56,10 @@
 		9908F51B246FDBA200ECF7D3 /* StravaToolsUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StravaToolsUITests.swift; sourceTree = "<group>"; };
 		9908F51D246FDBA200ECF7D3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9908F52A246FDC5F00ECF7D3 /* StravaAPIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StravaAPIClient.swift; sourceTree = "<group>"; };
+		9908F52F246FDFB500ECF7D3 /* strava.clientID */ = {isa = PBXFileReference; lastKnownFileType = file; path = strava.clientID; sourceTree = SOURCE_ROOT; };
+		9908F530246FDFB500ECF7D3 /* strava.clientSecret */ = {isa = PBXFileReference; lastKnownFileType = file; path = strava.clientSecret; sourceTree = SOURCE_ROOT; };
+		9908F535246FE39F00ECF7D3 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		9908F536246FE39F00ECF7D3 /* LoginViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LoginViewController.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -111,6 +119,8 @@
 				9908F504246FDBA100ECF7D3 /* LaunchScreen.storyboard */,
 				9908F507246FDBA100ECF7D3 /* Info.plist */,
 				9908F501246FDBA100ECF7D3 /* Preview Content */,
+				9908F535246FE39F00ECF7D3 /* LoginViewController.swift */,
+				9908F536246FE39F00ECF7D3 /* LoginViewController.xib */,
 			);
 			path = StravaTools;
 			sourceTree = "<group>";
@@ -144,6 +154,8 @@
 		9908F529246FDC2200ECF7D3 /* StravaAPIClient */ = {
 			isa = PBXGroup;
 			children = (
+				9908F52F246FDFB500ECF7D3 /* strava.clientID */,
+				9908F530246FDFB500ECF7D3 /* strava.clientSecret */,
 				9908F52A246FDC5F00ECF7D3 /* StravaAPIClient.swift */,
 			);
 			path = StravaAPIClient;
@@ -261,6 +273,9 @@
 			files = (
 				9908F506246FDBA100ECF7D3 /* LaunchScreen.storyboard in Resources */,
 				9908F503246FDBA100ECF7D3 /* Preview Assets.xcassets in Resources */,
+				9908F538246FE39F00ECF7D3 /* LoginViewController.xib in Resources */,
+				9908F532246FDFB500ECF7D3 /* strava.clientSecret in Resources */,
+				9908F531246FDFB500ECF7D3 /* strava.clientID in Resources */,
 				9908F500246FDBA100ECF7D3 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -289,6 +304,7 @@
 				9908F4FA246FDB9F00ECF7D3 /* AppDelegate.swift in Sources */,
 				9908F4FC246FDB9F00ECF7D3 /* SceneDelegate.swift in Sources */,
 				9908F52B246FDC5F00ECF7D3 /* StravaAPIClient.swift in Sources */,
+				9908F537246FE39F00ECF7D3 /* LoginViewController.swift in Sources */,
 				9908F4FE246FDB9F00ECF7D3 /* ContentView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
