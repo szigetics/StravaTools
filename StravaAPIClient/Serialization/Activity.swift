@@ -13,11 +13,13 @@ struct Activity : Decodable {
     let distance: Float
     let max_speed: Float
     let max_heartrate: Float?
+    let id: Int
     
-    init(name: String, distance: Float, max_speed: Float, max_heartrate: Float) {
+    init(name: String, distance: Float, max_speed: Float, max_heartrate: Float, id: Int) {
         self.name = name
         self.distance = distance
         self.max_speed = max_speed
         self.max_heartrate = max_heartrate
+        self.id = id
     }
 }

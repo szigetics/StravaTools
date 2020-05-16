@@ -46,10 +46,13 @@ final class LoginViewController: UIViewController {
         }
     }
     
-    private func showResult(_ title: String, _ message: String) {
+    typealias ShowResultAction = (() -> Void)
+    private func showResult(_ title: String, _ message: String, _ okButtonPressed: ShowResultAction? = nil) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
 
-        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { _ in
+            okButtonPressed?()
+        }))
 
         self.present(alert, animated: true)
     }
@@ -88,7 +91,18 @@ final class LoginViewController: UIViewController {
             let max_heartrate = activities.max{$0.max_heartrate ?? 0 < $1.max_heartrate ?? 0}
             print(max_heartrate ?? "failed to find acitivity with highest max heart rate")
             
-            self.showResult("Success", String(describing: activities))
+            self.showResult("Success", String(describing: activities), {
+                let alert = UIAlertController(title: "Open?", message: "Would you like to open longest activity in a browser?", preferredStyle: .alert)
+
+                alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { _ in
+                    guard let longestActivity = longest, let url = URL(string: "https://www.strava.com/activities/\(longestActivity.id)") else { return }
+                    UIApplication.shared.open(url, completionHandler: nil)
+                }))
+                
+                alert.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil))
+
+                self.present(alert, animated: true)
+            })
         }
     }
     
