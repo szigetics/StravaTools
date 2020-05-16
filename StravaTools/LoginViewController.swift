@@ -16,6 +16,8 @@ final class LoginViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        StravaAPIClient.sharedInstance.oauth.authConfig.authorizeContext = self
+        
         loginButton.isEnabled = !StravaAPIClient.sharedInstance.isLoggedIn()
     }
     

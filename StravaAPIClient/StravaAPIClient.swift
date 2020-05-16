@@ -13,31 +13,30 @@ class StravaAPIClient {
     let base = URL(string: "https://www.strava.com/api/v3")!
     
     static let sharedInstance = StravaAPIClient()
-    private var oauth: OAuth2 {
-        let oauth = OAuth2CodeGrant(settings: [
-        "client_id": self.clientID(),
-        "client_secret": self.clientSecret(),
-        "authorize_uri": "https://www.strava.com/oauth/authorize",
-        "token_uri": "https://www.strava.com/oauth/token",
-        "response_type": "code",
-        "approval_prompt": "force",
-        "redirect_uris": ["stravatest://localhost"], // scheme registered in Info.plist
-        "scope": "activity:read_all",
-        "parameters": [
-            "client_id": "46551",
-            "client_secret": "614236a56bd82ba38a3893b33571ee866ef94e1d"
-        ],
-        "verbose": true,
-        ] as OAuth2JSON)
+    var oauth: OAuth2
+    init() {
+        self.oauth = OAuth2CodeGrant(settings: [
+            "client_id": StravaAPIClient.clientID(),
+            "client_secret": StravaAPIClient.clientSecret(),
+            "authorize_uri": "https://www.strava.com/oauth/authorize",
+            "token_uri": "https://www.strava.com/oauth/token",
+            "response_type": "code",
+            "approval_prompt": "force",
+            "redirect_uris": ["stravatest://localhost"], // scheme registered in Info.plist
+            "scope": "activity:read_all",
+            "parameters": [
+                "client_id": "46551",
+                "client_secret": "614236a56bd82ba38a3893b33571ee866ef94e1d"
+            ],
+            "verbose": true,
+            ] as OAuth2JSON)
         
         oauth.authConfig.authorizeEmbedded = true
         oauth.logger = OAuth2DebugLogger(.trace)
-        
-        return oauth
     }
     var loader: OAuth2DataLoader? = nil
     
-    private func readFile(fileName: String, fileType: String) -> String{
+    static private func readFile(fileName: String, fileType: String) -> String{
         guard let filePathURL = Bundle.main.url(forResource: fileName, withExtension: fileType) else {
             return ""
         }
@@ -47,11 +46,11 @@ class StravaAPIClient {
         return contents
     }
     
-    private func clientID() -> String {
+    static private func clientID() -> String {
         return readFile(fileName: "strava", fileType: "clientID")
     }
     
-    private func clientSecret() -> String {
+    static private func clientSecret() -> String {
         return readFile(fileName: "strava", fileType: "clientSecret")
     }
     
