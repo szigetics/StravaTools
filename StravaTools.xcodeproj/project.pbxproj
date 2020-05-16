@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -16,6 +16,7 @@
 		9908F511246FDBA200ECF7D3 /* StravaToolsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9908F510246FDBA200ECF7D3 /* StravaToolsTests.swift */; };
 		9908F51C246FDBA200ECF7D3 /* StravaToolsUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9908F51B246FDBA200ECF7D3 /* StravaToolsUITests.swift */; };
 		9908F52B246FDC5F00ECF7D3 /* StravaAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9908F52A246FDC5F00ECF7D3 /* StravaAPIClient.swift */; };
+		9908F52E246FDD3800ECF7D3 /* OAuth2 in Frameworks */ = {isa = PBXBuildFile; productRef = 9908F52D246FDD3800ECF7D3 /* OAuth2 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -58,6 +59,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9908F52E246FDD3800ECF7D3 /* OAuth2 in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -163,6 +165,9 @@
 			dependencies = (
 			);
 			name = StravaTools;
+			packageProductDependencies = (
+				9908F52D246FDD3800ECF7D3 /* OAuth2 */,
+			);
 			productName = StravaTools;
 			productReference = 9908F4F6246FDB9F00ECF7D3 /* StravaTools.app */;
 			productType = "com.apple.product-type.application";
@@ -235,6 +240,9 @@
 				Base,
 			);
 			mainGroup = 9908F4ED246FDB9F00ECF7D3;
+			packageReferences = (
+				9908F52C246FDD3800ECF7D3 /* XCRemoteSwiftPackageReference "OAuth2" */,
+			);
 			productRefGroup = 9908F4F7246FDB9F00ECF7D3 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -606,6 +614,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		9908F52C246FDD3800ECF7D3 /* XCRemoteSwiftPackageReference "OAuth2" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/p2/OAuth2.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.2.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		9908F52D246FDD3800ECF7D3 /* OAuth2 */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 9908F52C246FDD3800ECF7D3 /* XCRemoteSwiftPackageReference "OAuth2" */;
+			productName = OAuth2;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 9908F4EE246FDB9F00ECF7D3 /* Project object */;
 }

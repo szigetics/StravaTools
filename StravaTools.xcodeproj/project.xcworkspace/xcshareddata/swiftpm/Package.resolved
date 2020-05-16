@@ -1,0 +1,16 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "OAuth2",
+        "repositoryURL": "https://github.com/p2/OAuth2.git",
+        "state": {
+          "branch": null,
+          "revision": "b0c71466176f3d7a22e5da20532c01d78a661f1d",
+          "version": "5.2.0"
+        }
+      }
+    ]
+  },
+  "version": 1
+}
