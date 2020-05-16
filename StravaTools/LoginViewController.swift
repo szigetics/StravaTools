@@ -76,6 +76,18 @@ final class LoginViewController: UIViewController {
                 return
             }
             
+            let act = activities.filter { $0.distance == 15684.8 }
+            print(act)
+            
+            let longest = activities.max{$0.distance < $1.distance}
+            print(longest ?? "failed to find longest activity")
+            
+            let max_speed = activities.max{$0.max_speed < $1.max_speed}
+            print(max_speed ?? "failed to find acitivity with highest speed")
+            
+            let max_heartrate = activities.max{$0.max_heartrate ?? 0 < $1.max_heartrate ?? 0}
+            print(max_heartrate ?? "failed to find acitivity with highest max heart rate")
+            
             self.showResult("Success", String(describing: activities))
         }
     }

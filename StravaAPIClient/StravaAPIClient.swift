@@ -123,18 +123,6 @@ class StravaAPIClient {
                         
                         let decoder = JSONDecoder()
                         let activities = try decoder.decode([Activity].self, from: data)
-                        
-                        //                        let act = activities.filter { $0.distance == 15684.8 }
-                        //                        print(act)
-                        
-                        //                        let longest = activities.max{$0.distance < $1.distance}
-                        //                        print(longest)
-                        
-                        //                        let max_speed = activities.max{$0.max_speed < $1.max_speed}
-                        //                        print(max_speed)
-                        
-                        //                        let max_heartrate = activities.max{$0.max_heartrate ?? 0 < $1.max_heartrate ?? 0}
-                        //                        print(max_heartrate)
                         completion(activities, nil)
                     } catch {
                         print("Error with data \(String(describing: String(data: data, encoding: .utf8)))")
