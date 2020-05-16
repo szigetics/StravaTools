@@ -19,17 +19,26 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Kc7-hU-0f9">
-                    <rect key="frame" x="153.5" y="438" width="107" height="30"/>
+                    <rect key="frame" x="153.5" y="64" width="107" height="30"/>
                     <state key="normal" title="Log in to Strava"/>
                     <connections>
                         <action selector="loginButtonPressed:" destination="-1" eventType="touchUpInside" id="kXx-cR-sQ5"/>
                     </connections>
                 </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="12O-qc-VFF">
+                    <rect key="frame" x="154" y="102" width="105" height="30"/>
+                    <state key="normal" title="Current Athlete"/>
+                    <connections>
+                        <action selector="currentAthleteButtonPressed:" destination="-1" eventType="touchUpInside" id="yPq-Vg-Ntd"/>
+                    </connections>
+                </button>
             </subviews>
             <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
             <constraints>
-                <constraint firstItem="Kc7-hU-0f9" firstAttribute="centerY" secondItem="fnl-2z-Ty3" secondAttribute="centerY" id="EkL-wr-2fW"/>
                 <constraint firstItem="Kc7-hU-0f9" firstAttribute="centerX" secondItem="fnl-2z-Ty3" secondAttribute="centerX" id="MTa-3E-8MG"/>
+                <constraint firstItem="Kc7-hU-0f9" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" constant="20" id="NLa-AY-DYo"/>
+                <constraint firstItem="12O-qc-VFF" firstAttribute="centerX" secondItem="fnl-2z-Ty3" secondAttribute="centerX" id="TBh-fo-ssn"/>
+                <constraint firstItem="12O-qc-VFF" firstAttribute="top" secondItem="Kc7-hU-0f9" secondAttribute="bottom" constant="8" id="Vp8-2h-ity"/>
             </constraints>
             <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
             <point key="canvasLocation" x="139" y="137"/>

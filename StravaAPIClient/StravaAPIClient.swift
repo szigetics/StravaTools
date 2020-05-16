@@ -10,6 +10,9 @@ import Foundation
 import OAuth2
 
 class StravaAPIClient {
+    let base = URL(string: "https://www.strava.com/api/v3")!
+    
+    static let sharedInstance = StravaAPIClient()
     private var oauth: OAuth2 {
         let oauth = OAuth2CodeGrant(settings: [
         "client_id": self.clientID(),
@@ -29,9 +32,10 @@ class StravaAPIClient {
         
         oauth.authConfig.authorizeEmbedded = true
         oauth.logger = OAuth2DebugLogger(.trace)
+        
         return oauth
     }
-    static let sharedInstance = StravaAPIClient()
+    var loader: OAuth2DataLoader? = nil
     
     private func readFile(fileName: String, fileType: String) -> String{
         guard let filePathURL = Bundle.main.url(forResource: fileName, withExtension: fileType) else {
@@ -75,8 +79,25 @@ class StravaAPIClient {
         }
     }
     
-    func currentAthlete() {
-        //TODO
+    typealias CurrentAthleteCallback = (_ json: OAuth2JSON?, _ error: Error?) -> Void
+    func currentAthlete(completion: @escaping CurrentAthleteCallback) {
+        let url = base.appendingPathComponent("athlete")
+        
+        let req = self.oauth.request(forURL: url)
+        
+        self.loader = OAuth2DataLoader(oauth2: self.oauth)
+        self.loader?.perform(request: req) { response in
+            do {
+                let dict = try response.responseJSON()
+                DispatchQueue.main.async {
+                    completion(dict, nil)
+                }
+            } catch {
+                DispatchQueue.main.async {
+                    completion(nil, error)
+                }
+            }
+        }
     }
     
     func listActivities() {

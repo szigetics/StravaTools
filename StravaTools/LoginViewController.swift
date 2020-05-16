@@ -24,6 +24,25 @@ final class LoginViewController: UIViewController {
             print("error : \(String(describing: error))")
         }
     }
+    
+    private func showResult(_ title: String, _ message: String) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+
+        self.present(alert, animated: true)
+    }
+    
+    @IBAction func currentAthleteButtonPressed(_ sender: Any) {
+        StravaAPIClient.sharedInstance.currentAthlete { (json, error) in
+            if error != nil {
+                self.showResult("Error", String(describing: error))
+                return
+            }
+            
+            self.showResult("Success", String(describing: json))
+        }
+    }
 }
 
 extension LoginViewController: UIViewControllerRepresentable {
