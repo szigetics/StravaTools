@@ -64,6 +64,18 @@ final class LoginViewController: UIViewController {
             self.showResult("Success", String(describing: json))
         }
     }
+    
+    @IBAction func listActivitiesButtonPressed(_ sender: Any) {
+        StravaAPIClient.sharedInstance.listActivities { (activities: [Activity], error: Error?) in
+            if error != nil {
+                self.showResult("Error", String(describing: error))
+                return
+            }
+            
+            self.showResult("Success", String(describing: activities))
+        }
+    }
+    
 }
 
 extension LoginViewController: UIViewControllerRepresentable {

@@ -21,6 +21,9 @@
 		9908F532246FDFB500ECF7D3 /* strava.clientSecret in Resources */ = {isa = PBXBuildFile; fileRef = 9908F530246FDFB500ECF7D3 /* strava.clientSecret */; };
 		9908F537246FE39F00ECF7D3 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9908F535246FE39F00ECF7D3 /* LoginViewController.swift */; };
 		9908F538246FE39F00ECF7D3 /* LoginViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9908F536246FE39F00ECF7D3 /* LoginViewController.xib */; };
+		9908F53B246FF0D500ECF7D3 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 9908F53A246FF0D500ECF7D3 /* Alamofire */; };
+		9908F53E246FF12900ECF7D3 /* OAuth2RetryHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9908F53D246FF12900ECF7D3 /* OAuth2RetryHandler.swift */; };
+		9908F541246FF41000ECF7D3 /* Activity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9908F540246FF41000ECF7D3 /* Activity.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -60,6 +63,8 @@
 		9908F530246FDFB500ECF7D3 /* strava.clientSecret */ = {isa = PBXFileReference; lastKnownFileType = file; path = strava.clientSecret; sourceTree = SOURCE_ROOT; };
 		9908F535246FE39F00ECF7D3 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		9908F536246FE39F00ECF7D3 /* LoginViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LoginViewController.xib; sourceTree = "<group>"; };
+		9908F53D246FF12900ECF7D3 /* OAuth2RetryHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OAuth2RetryHandler.swift; sourceTree = "<group>"; };
+		9908F540246FF41000ECF7D3 /* Activity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Activity.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -68,6 +73,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9908F52E246FDD3800ECF7D3 /* OAuth2 in Frameworks */,
+				9908F53B246FF0D500ECF7D3 /* Alamofire in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -154,11 +160,29 @@
 		9908F529246FDC2200ECF7D3 /* StravaAPIClient */ = {
 			isa = PBXGroup;
 			children = (
+				9908F53F246FF3EA00ECF7D3 /* Serialization */,
+				9908F53C246FF10500ECF7D3 /* Alamofire */,
 				9908F52F246FDFB500ECF7D3 /* strava.clientID */,
 				9908F530246FDFB500ECF7D3 /* strava.clientSecret */,
 				9908F52A246FDC5F00ECF7D3 /* StravaAPIClient.swift */,
 			);
 			path = StravaAPIClient;
+			sourceTree = "<group>";
+		};
+		9908F53C246FF10500ECF7D3 /* Alamofire */ = {
+			isa = PBXGroup;
+			children = (
+				9908F53D246FF12900ECF7D3 /* OAuth2RetryHandler.swift */,
+			);
+			path = Alamofire;
+			sourceTree = "<group>";
+		};
+		9908F53F246FF3EA00ECF7D3 /* Serialization */ = {
+			isa = PBXGroup;
+			children = (
+				9908F540246FF41000ECF7D3 /* Activity.swift */,
+			);
+			path = Serialization;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -179,6 +203,7 @@
 			name = StravaTools;
 			packageProductDependencies = (
 				9908F52D246FDD3800ECF7D3 /* OAuth2 */,
+				9908F53A246FF0D500ECF7D3 /* Alamofire */,
 			);
 			productName = StravaTools;
 			productReference = 9908F4F6246FDB9F00ECF7D3 /* StravaTools.app */;
@@ -254,6 +279,7 @@
 			mainGroup = 9908F4ED246FDB9F00ECF7D3;
 			packageReferences = (
 				9908F52C246FDD3800ECF7D3 /* XCRemoteSwiftPackageReference "OAuth2" */,
+				9908F539246FF0D500ECF7D3 /* XCRemoteSwiftPackageReference "Alamofire" */,
 			);
 			productRefGroup = 9908F4F7246FDB9F00ECF7D3 /* Products */;
 			projectDirPath = "";
@@ -303,8 +329,10 @@
 			files = (
 				9908F4FA246FDB9F00ECF7D3 /* AppDelegate.swift in Sources */,
 				9908F4FC246FDB9F00ECF7D3 /* SceneDelegate.swift in Sources */,
+				9908F541246FF41000ECF7D3 /* Activity.swift in Sources */,
 				9908F52B246FDC5F00ECF7D3 /* StravaAPIClient.swift in Sources */,
 				9908F537246FE39F00ECF7D3 /* LoginViewController.swift in Sources */,
+				9908F53E246FF12900ECF7D3 /* OAuth2RetryHandler.swift in Sources */,
 				9908F4FE246FDB9F00ECF7D3 /* ContentView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -640,6 +668,14 @@
 				minimumVersion = 5.2.0;
 			};
 		};
+		9908F539246FF0D500ECF7D3 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.1.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -647,6 +683,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 9908F52C246FDD3800ECF7D3 /* XCRemoteSwiftPackageReference "OAuth2" */;
 			productName = OAuth2;
+		};
+		9908F53A246FF0D500ECF7D3 /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 9908F539246FF0D500ECF7D3 /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

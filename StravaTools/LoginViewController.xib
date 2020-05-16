@@ -27,10 +27,17 @@
                     </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="12O-qc-VFF">
-                    <rect key="frame" x="154" y="102" width="105" height="30"/>
+                    <rect key="frame" x="154.5" y="102" width="105" height="30"/>
                     <state key="normal" title="Current Athlete"/>
                     <connections>
                         <action selector="currentAthleteButtonPressed:" destination="-1" eventType="touchUpInside" id="yPq-Vg-Ntd"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="u50-NM-z3D">
+                    <rect key="frame" x="162" y="140" width="90" height="30"/>
+                    <state key="normal" title="List activities"/>
+                    <connections>
+                        <action selector="listActivitiesButtonPressed:" destination="-1" eventType="touchUpInside" id="hyh-Z9-NTd"/>
                     </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6SA-ps-g9b">
@@ -43,10 +50,14 @@
             </subviews>
             <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
             <constraints>
+                <constraint firstItem="u50-NM-z3D" firstAttribute="centerX" secondItem="fnl-2z-Ty3" secondAttribute="centerX" id="5ub-AW-Ylo"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="bottom" secondItem="6SA-ps-g9b" secondAttribute="bottom" id="DfL-W4-7BU"/>
                 <constraint firstItem="Kc7-hU-0f9" firstAttribute="centerX" secondItem="fnl-2z-Ty3" secondAttribute="centerX" id="MTa-3E-8MG"/>
                 <constraint firstItem="Kc7-hU-0f9" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" constant="20" id="NLa-AY-DYo"/>
+                <constraint firstItem="6SA-ps-g9b" firstAttribute="centerX" secondItem="fnl-2z-Ty3" secondAttribute="centerX" id="SrV-To-BlL"/>
                 <constraint firstItem="12O-qc-VFF" firstAttribute="centerX" secondItem="fnl-2z-Ty3" secondAttribute="centerX" id="TBh-fo-ssn"/>
                 <constraint firstItem="12O-qc-VFF" firstAttribute="top" secondItem="Kc7-hU-0f9" secondAttribute="bottom" constant="8" id="Vp8-2h-ity"/>
+                <constraint firstItem="u50-NM-z3D" firstAttribute="top" secondItem="12O-qc-VFF" secondAttribute="bottom" constant="8" id="na5-Kh-zAn"/>
             </constraints>
             <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
             <point key="canvasLocation" x="139" y="137"/>

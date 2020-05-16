@@ -8,12 +8,15 @@
 
 import Foundation
 import OAuth2
+import Alamofire
 
 class StravaAPIClient {
     let base = URL(string: "https://www.strava.com/api/v3")!
     
     static let sharedInstance = StravaAPIClient()
     var oauth: OAuth2
+    var loader: OAuth2DataLoader? = nil
+    
     init() {
         self.oauth = OAuth2CodeGrant(settings: [
             "client_id": StravaAPIClient.clientID(),
@@ -34,7 +37,6 @@ class StravaAPIClient {
         oauth.authConfig.authorizeEmbedded = true
         oauth.logger = OAuth2DebugLogger(.trace)
     }
-    var loader: OAuth2DataLoader? = nil
     
     static private func readFile(fileName: String, fileType: String) -> String{
         guard let filePathURL = Bundle.main.url(forResource: fileName, withExtension: fileType) else {
@@ -102,7 +104,48 @@ class StravaAPIClient {
         }
     }
     
-    func listActivities() {
-        //TODO
+    typealias ListActivitiesCallback = (_ activities: [Activity], _ error: Error?) -> Void
+    func listActivities(completion: @escaping ListActivitiesCallback) {
+        //Note : OAuth2DataLoader fails to parse the JSON so we use Alamofire instead to send the request and process the response
+        let url = base.appendingPathComponent("athlete/activities")
+        
+        let interceptor = OAuth2RetryHandler(oauth)
+        AF.request(url, method: .get, interceptor: interceptor)
+            .validate()
+            .response { response in
+                switch response.result {
+                case .success(let data):
+                    guard let data = data else {
+                        completion([], NSError(domain:"", code:1, userInfo:nil))
+                        return
+                    }
+                    do {
+                        print("\(String(describing: String(data: data, encoding: .utf8)))")
+                        
+                        let decoder = JSONDecoder()
+                        let activities = try decoder.decode([Activity].self, from: data)
+                        
+                        //                        let act = activities.filter { $0.distance == 15684.8 }
+                        //                        print(act)
+                        
+                        //                        let longest = activities.max{$0.distance < $1.distance}
+                        //                        print(longest)
+                        
+                        //                        let max_speed = activities.max{$0.max_speed < $1.max_speed}
+                        //                        print(max_speed)
+                        
+                        //                        let max_heartrate = activities.max{$0.max_heartrate ?? 0 < $1.max_heartrate ?? 0}
+                        //                        print(max_heartrate)
+                        completion(activities, nil)
+                    } catch {
+                        print("Error with data \(String(describing: String(data: data, encoding: .utf8)))")
+                        print("failure \(error)")
+                        completion([], NSError(domain:"", code:2, userInfo:nil))
+                    }
+                case .failure(let error):
+                    print("failure \(error)")
+                    completion([], NSError(domain:"", code:3, userInfo:nil))
+                }
+        }
     }
 }
