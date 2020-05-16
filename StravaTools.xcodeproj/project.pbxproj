@@ -15,6 +15,7 @@
 		9908F506246FDBA100ECF7D3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9908F504246FDBA100ECF7D3 /* LaunchScreen.storyboard */; };
 		9908F511246FDBA200ECF7D3 /* StravaToolsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9908F510246FDBA200ECF7D3 /* StravaToolsTests.swift */; };
 		9908F51C246FDBA200ECF7D3 /* StravaToolsUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9908F51B246FDBA200ECF7D3 /* StravaToolsUITests.swift */; };
+		9908F52B246FDC5F00ECF7D3 /* StravaAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9908F52A246FDC5F00ECF7D3 /* StravaAPIClient.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +50,7 @@
 		9908F517246FDBA200ECF7D3 /* StravaToolsUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = StravaToolsUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9908F51B246FDBA200ECF7D3 /* StravaToolsUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StravaToolsUITests.swift; sourceTree = "<group>"; };
 		9908F51D246FDBA200ECF7D3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		9908F52A246FDC5F00ECF7D3 /* StravaAPIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StravaAPIClient.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,6 +81,7 @@
 		9908F4ED246FDB9F00ECF7D3 = {
 			isa = PBXGroup;
 			children = (
+				9908F529246FDC2200ECF7D3 /* StravaAPIClient */,
 				9908F4F8246FDB9F00ECF7D3 /* StravaTools */,
 				9908F50F246FDBA200ECF7D3 /* StravaToolsTests */,
 				9908F51A246FDBA200ECF7D3 /* StravaToolsUITests */,
@@ -134,6 +137,14 @@
 				9908F51D246FDBA200ECF7D3 /* Info.plist */,
 			);
 			path = StravaToolsUITests;
+			sourceTree = "<group>";
+		};
+		9908F529246FDC2200ECF7D3 /* StravaAPIClient */ = {
+			isa = PBXGroup;
+			children = (
+				9908F52A246FDC5F00ECF7D3 /* StravaAPIClient.swift */,
+			);
+			path = StravaAPIClient;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -269,6 +280,7 @@
 			files = (
 				9908F4FA246FDB9F00ECF7D3 /* AppDelegate.swift in Sources */,
 				9908F4FC246FDB9F00ECF7D3 /* SceneDelegate.swift in Sources */,
+				9908F52B246FDC5F00ECF7D3 /* StravaAPIClient.swift in Sources */,
 				9908F4FE246FDB9F00ECF7D3 /* ContentView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
