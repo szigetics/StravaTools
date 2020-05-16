@@ -56,6 +56,8 @@ final class LoginViewController: UIViewController {
     
     @IBAction func currentAthleteButtonPressed(_ sender: Any) {
         StravaAPIClient.sharedInstance.currentAthlete { (json, error) in
+            self.updateLogInLogOutButtonsState()
+            
             if error != nil {
                 self.showResult("Error", String(describing: error))
                 return
@@ -67,6 +69,8 @@ final class LoginViewController: UIViewController {
     
     @IBAction func listActivitiesButtonPressed(_ sender: Any) {
         StravaAPIClient.sharedInstance.listActivities { (activities: [Activity], error: Error?) in
+            self.updateLogInLogOutButtonsState()
+            
             if error != nil {
                 self.showResult("Error", String(describing: error))
                 return

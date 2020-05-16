@@ -79,7 +79,6 @@ class StravaAPIClient {
     typealias LogoutCallback = () -> Void
     func logOut(completion: @escaping LogoutCallback) {
         oauth.forgetTokens()
-        oauth.forgetClient()
         completion()
     }
     
