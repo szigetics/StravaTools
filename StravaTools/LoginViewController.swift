@@ -12,18 +12,37 @@ import SwiftUI
 final class LoginViewController: UIViewController {
 
     @IBOutlet weak var loginButton: UIButton!
+    @IBOutlet weak var logoutButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         StravaAPIClient.sharedInstance.oauth.authConfig.authorizeContext = self
         
+        updateLogInLogOutButtonsState()
+    }
+    
+    private func updateLogInLogOutButtonsState() {
         loginButton.isEnabled = !StravaAPIClient.sharedInstance.isLoggedIn()
+        logoutButton.isEnabled = StravaAPIClient.sharedInstance.isLoggedIn()
     }
     
     @IBAction func loginButtonPressed(_ sender: Any) {
         StravaAPIClient.sharedInstance.authenticate(self) { error in
-            print("error : \(String(describing: error))")
+            self.updateLogInLogOutButtonsState()
+            
+            if error != nil {
+                self.showResult("Error", String(describing: error))
+                return
+            }
+            
+            self.showResult("Success", "Successfully logged in")
+        }
+    }
+    
+    @IBAction func logOutButtonPressed(_ sender: Any) {
+        StravaAPIClient.sharedInstance.logOut() {
+            self.updateLogInLogOutButtonsState()
         }
     }
     

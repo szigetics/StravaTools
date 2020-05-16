@@ -10,6 +10,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="LoginViewController" customModule="StravaTools" customModuleProvider="target">
             <connections>
                 <outlet property="loginButton" destination="Kc7-hU-0f9" id="Fqk-zD-xss"/>
+                <outlet property="logoutButton" destination="6SA-ps-g9b" id="jc2-jo-t7Y"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -30,6 +31,13 @@
                     <state key="normal" title="Current Athlete"/>
                     <connections>
                         <action selector="currentAthleteButtonPressed:" destination="-1" eventType="touchUpInside" id="yPq-Vg-Ntd"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6SA-ps-g9b">
+                    <rect key="frame" x="181" y="832" width="52" height="30"/>
+                    <state key="normal" title="Log out"/>
+                    <connections>
+                        <action selector="logOutButtonPressed:" destination="-1" eventType="touchUpInside" id="aVy-2h-GQ5"/>
                     </connections>
                 </button>
             </subviews>

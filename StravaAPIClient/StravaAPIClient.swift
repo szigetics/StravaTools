@@ -58,16 +58,8 @@ class StravaAPIClient {
     func authenticate(_ context: AnyObject?, completion: @escaping AuthenticateCallback) {
         oauth.authConfig.authorizeContext = context
         oauth.authorize { (a: OAuth2JSON?, error: OAuth2Error?) in
-            if error != nil {
-                return
-            }
-            //            self.currentAthlete()
-            self.listActivities()
+            completion(error)
         }
-    }
-    
-    func isLoggedIn() -> Bool {
-        return oauth.hasUnexpiredAccessToken()
     }
     
     func handleRedirectURL(_ url: URL) {
@@ -76,6 +68,17 @@ class StravaAPIClient {
         } catch {
             print("Unexpected error: \(error).")
         }
+    }
+    
+    func isLoggedIn() -> Bool {
+        return oauth.hasUnexpiredAccessToken()
+    }
+    
+    typealias LogoutCallback = () -> Void
+    func logOut(completion: @escaping LogoutCallback) {
+        oauth.forgetTokens()
+        oauth.forgetClient()
+        completion()
     }
     
     typealias CurrentAthleteCallback = (_ json: OAuth2JSON?, _ error: Error?) -> Void
