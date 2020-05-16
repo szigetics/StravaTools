@@ -1,0 +1,21 @@
+name: CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  test:
+    name: Testing iOS app
+    runs-on: macOS-latest
+
+    steps:
+    # Checks-out repository under $GITHUB_WORKSPACE
+    - name: Checkout repository
+      uses: actions/checkout@v2
+    - name: Force XCode 11.4.1
+      run: sudo xcode-select -switch /Applications/Xcode_11.4.1.app
+    - name: Testing iOS app
+      run: exec ./.github/scripts/test_app.sh
