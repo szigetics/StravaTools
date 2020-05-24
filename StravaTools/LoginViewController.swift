@@ -114,6 +114,7 @@ final class LoginViewController: UIViewController {
     var activityIndicatorContainer: UIView? = nil //blocking touches meanwhile `activityIndicator` is visible
     var activityIndicatorBackground: UIView? = nil
     var activityIndicator: UIActivityIndicatorView? = nil
+    var activityIndicatorLabel: UILabel? = nil
     
     func showActivityIndicatory(uiView: UIView) {
         activityIndicatorContainer = UIView()
@@ -132,6 +133,14 @@ final class LoginViewController: UIViewController {
         actInd.color = UIColor.white
         actInd.startAnimating()
         
+        activityIndicatorLabel = UILabel()
+        guard let label = activityIndicatorLabel else {
+            return
+        }
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.textColor = UIColor.white
+        label.text = "Loading..."
+        
         activityIndicatorBackground = UIView()
         guard let indicatorBackground = activityIndicatorBackground else {
             return
@@ -141,6 +150,7 @@ final class LoginViewController: UIViewController {
         indicatorBackground.layer.cornerRadius = 10
         container.addSubview(indicatorBackground)
         indicatorBackground.addSubview(actInd)
+        indicatorBackground.addSubview(label)
         uiView.addSubview(container)
         
         //container fills the view
@@ -152,9 +162,10 @@ final class LoginViewController: UIViewController {
         indicatorBackground.centerXAnchor.constraint(equalTo: container.centerXAnchor).isActive = true
         indicatorBackground.centerYAnchor.constraint(equalTo: container.centerYAnchor).isActive = true
         
-        let views = ["actInd": actInd]
-        indicatorBackground.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-[actInd]-|", options: NSLayoutConstraint.FormatOptions(rawValue: 0), metrics: nil, views: views))
-        indicatorBackground.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-[actInd]-|", options: NSLayoutConstraint.FormatOptions(rawValue: 0), metrics: nil, views: views))
+        let views = ["actInd": actInd, "label": label]
+        actInd.centerXAnchor.constraint(equalTo: indicatorBackground.centerXAnchor).isActive = true
+        indicatorBackground.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-[label]-|", options: NSLayoutConstraint.FormatOptions(rawValue: 0), metrics: nil, views: views))
+        indicatorBackground.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-[actInd]-[label]-|", options: NSLayoutConstraint.FormatOptions(rawValue: 0), metrics: nil, views: views))
     }
     
     func hideActivityIndicator() {
