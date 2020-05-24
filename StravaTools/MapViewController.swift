@@ -37,8 +37,39 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         return result
     }
 
+    private lazy var cachedActivities = { () -> [Activity] in
+        var cached: [Activity] = []
+        guard FileManager.default.fileExists(atPath: LoginViewController.activityCacheFullPath.path) else {
+            print("Activities not cached yet")
+            return cached
+        }
+        do {
+            let data = try Data(contentsOf: LoginViewController.activityCacheFullPath, options: .mappedIfSafe)
+            let jsonResult = try JSONSerialization.jsonObject(with: data, options: .mutableLeaves)
+        } catch {
+            return cached
+        }
+        return cached
+    }()
+    
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
         //get activities for currently visible map region
-//        MapViewController.coordinateInRegion(<#T##coord: CLLocationCoordinate2D##CLLocationCoordinate2D#>, mapView.region)
+        let visibleActivities = cachedActivities.filter { (activity) -> Bool in
+            var startVisible = false
+            if let start_latlng = activity.start_latlng {
+                let startLoc = CLLocationCoordinate2D(latitude: CLLocationDegrees(start_latlng[0]), longitude: CLLocationDegrees(start_latlng[1]))
+                startVisible = MapViewController.coordinateInRegion(startLoc, mapView.region)
+            }
+            
+            var endVisible = false
+            if let end_latlng = activity.end_latlng {
+                let endLoc = CLLocationCoordinate2D(latitude: CLLocationDegrees(end_latlng[0]), longitude: CLLocationDegrees(end_latlng[1]))
+                endVisible = MapViewController.coordinateInRegion(endLoc, mapView.region)
+            }
+            
+            return startVisible || endVisible
+        }
+        
+        print("visibleActivities: \(visibleActivities)")
     }
 }
