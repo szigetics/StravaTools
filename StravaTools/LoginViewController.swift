@@ -203,6 +203,15 @@ final class LoginViewController: UIViewController {
             self.activityIndicatorLabel?.text = "Loaded \(count) activities..."
         }
     }
+    
+    @IBAction func showOnMapButtonPressed(_ sender: Any) {
+        guard FileManager.default.fileExists(atPath: activityCacheFullPath.path) else {
+            showResult("Activities not cached yet", "Please cache all activities first!")
+            return
+        }
+        
+        self.navigationController?.pushViewController(MapViewController(), animated: true)
+    }
 }
 
 extension LoginViewController: UIViewControllerRepresentable {

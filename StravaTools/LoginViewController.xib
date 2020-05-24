@@ -54,18 +54,27 @@
                         <action selector="cacheAllActivitiesButtonPressed:" destination="-1" eventType="touchUpInside" id="RDU-r4-4of"/>
                     </connections>
                 </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Aus-mp-zK3">
+                    <rect key="frame" x="101" y="216" width="212" height="30"/>
+                    <state key="normal" title="Show cached activities on map"/>
+                    <connections>
+                        <action selector="showOnMapButtonPressed:" destination="-1" eventType="touchUpInside" id="cGp-Zz-dVF"/>
+                    </connections>
+                </button>
             </subviews>
             <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
             <constraints>
                 <constraint firstItem="u50-NM-z3D" firstAttribute="centerX" secondItem="fnl-2z-Ty3" secondAttribute="centerX" id="5ub-AW-Ylo"/>
                 <constraint firstItem="lmY-dv-9Ib" firstAttribute="top" secondItem="u50-NM-z3D" secondAttribute="bottom" constant="8" id="6Hg-KM-4Fc"/>
                 <constraint firstItem="fnl-2z-Ty3" firstAttribute="bottom" secondItem="6SA-ps-g9b" secondAttribute="bottom" id="DfL-W4-7BU"/>
+                <constraint firstItem="Aus-mp-zK3" firstAttribute="centerX" secondItem="fnl-2z-Ty3" secondAttribute="centerX" id="J94-bp-vUV"/>
                 <constraint firstItem="lmY-dv-9Ib" firstAttribute="centerX" secondItem="fnl-2z-Ty3" secondAttribute="centerX" id="Kns-v4-STQ"/>
                 <constraint firstItem="Kc7-hU-0f9" firstAttribute="centerX" secondItem="fnl-2z-Ty3" secondAttribute="centerX" id="MTa-3E-8MG"/>
                 <constraint firstItem="Kc7-hU-0f9" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" constant="20" id="NLa-AY-DYo"/>
                 <constraint firstItem="6SA-ps-g9b" firstAttribute="centerX" secondItem="fnl-2z-Ty3" secondAttribute="centerX" id="SrV-To-BlL"/>
                 <constraint firstItem="12O-qc-VFF" firstAttribute="centerX" secondItem="fnl-2z-Ty3" secondAttribute="centerX" id="TBh-fo-ssn"/>
                 <constraint firstItem="12O-qc-VFF" firstAttribute="top" secondItem="Kc7-hU-0f9" secondAttribute="bottom" constant="8" id="Vp8-2h-ity"/>
+                <constraint firstItem="Aus-mp-zK3" firstAttribute="top" secondItem="lmY-dv-9Ib" secondAttribute="bottom" constant="8" id="feh-da-TNy"/>
                 <constraint firstItem="u50-NM-z3D" firstAttribute="top" secondItem="12O-qc-VFF" secondAttribute="bottom" constant="8" id="na5-Kh-zAn"/>
             </constraints>
             <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
