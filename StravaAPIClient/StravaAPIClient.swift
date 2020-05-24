@@ -104,12 +104,12 @@ class StravaAPIClient {
     }
     
     typealias ListActivitiesCallback = (_ activities: [Activity], _ error: Error?) -> Void
-    func listActivities(completion: @escaping ListActivitiesCallback) {
+    func listActivities(page: Int = 1, completion: @escaping ListActivitiesCallback) {
         //Note : OAuth2DataLoader fails to parse the JSON so we use Alamofire instead to send the request and process the response
         let url = base.appendingPathComponent("athlete/activities")
         
         let interceptor = OAuth2RetryHandler(oauth)
-        AF.request(url, method: .get, interceptor: interceptor)
+        AF.request(url, method: .get, parameters: [ "page": "\(page)" ], interceptor: interceptor)
             .validate()
             .response { response in
                 switch response.result {
