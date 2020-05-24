@@ -180,27 +180,27 @@ final class LoginViewController: UIViewController {
     
     @IBAction func cacheAllActivitiesButtonPressed(_ sender: Any) {
         showActivityIndicatory(uiView: self.view)
-//        StravaAPIClient.sharedInstance.listAllActivities(completion: {  (allActivities: [Activity], error: Error?) in
-//            self.hideActivityIndicator()
-//            self.updateLogInLogOutButtonsState()
-//
-//            if error != nil {
-//                self.showResult("Error", String(describing: error))
-//                return
-//            }
-//
-//            let fullPath = LoginViewController.getDocumentsDirectory().appendingPathComponent("allActivities").appendingPathComponent("all.saved")
-//
-//            do {
-//                let data = try NSKeyedArchiver.archivedData(withRootObject: allActivities, requiringSecureCoding: false)
-//                try data.write(to: fullPath)
-//            } catch {
-//                print("Couldn't write file")
-//            }
-//        }) { (count) in
-//            print("number of activities loaded so far : \(count)")
-//
-//        }
+        StravaAPIClient.sharedInstance.listAllActivities(completion: {  (allActivities: [Activity], error: Error?) in
+            self.hideActivityIndicator()
+            self.updateLogInLogOutButtonsState()
+
+            if error != nil {
+                self.showResult("Error", String(describing: error))
+                return
+            }
+
+            let fullPath = LoginViewController.getDocumentsDirectory().appendingPathComponent("allActivities").appendingPathComponent("all.saved")
+
+            do {
+                let data = try NSKeyedArchiver.archivedData(withRootObject: allActivities, requiringSecureCoding: false)
+                try data.write(to: fullPath)
+            } catch {
+                print("Couldn't write file")
+            }
+        }) { (count) in
+            print("number of activities loaded so far : \(count)")
+            self.activityIndicatorLabel?.text = "Loaded \(count) activities..."
+        }
     }
 }
 
