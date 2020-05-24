@@ -111,12 +111,13 @@ final class LoginViewController: UIViewController {
         return paths[0]
     }
     
+    var activityIndicatorContainer: UIView? = nil //blocking touches meanwhile `activityIndicator` is visible
+    var activityIndicatorBackground: UIView? = nil
     var activityIndicator: UIActivityIndicatorView? = nil
-    var container: UIView? = nil //blocking touches meanwhile `activityIndicator` is visible
     
     func showActivityIndicatory(uiView: UIView) {
-        container = UIView()
-        guard let container = container else {
+        activityIndicatorContainer = UIView()
+        guard let container = activityIndicatorContainer else {
             return
         }
         container.translatesAutoresizingMaskIntoConstraints = false
@@ -128,10 +129,18 @@ final class LoginViewController: UIViewController {
         }
         actInd.translatesAutoresizingMaskIntoConstraints = false
         actInd.style = UIActivityIndicatorView.Style.large
-        actInd.color = UIColor.gray
+        actInd.color = UIColor.white
         actInd.startAnimating()
         
-        container.addSubview(actInd)
+        activityIndicatorBackground = UIView()
+        guard let indicatorBackground = activityIndicatorBackground else {
+            return
+        }
+        indicatorBackground.translatesAutoresizingMaskIntoConstraints = false
+        indicatorBackground.backgroundColor = UIColor.gray
+        indicatorBackground.layer.cornerRadius = 10
+        container.addSubview(indicatorBackground)
+        indicatorBackground.addSubview(actInd)
         uiView.addSubview(container)
         
         //container fills the view
@@ -140,15 +149,22 @@ final class LoginViewController: UIViewController {
         container.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
         container.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
         
-        actInd.centerXAnchor.constraint(equalTo: container.centerXAnchor).isActive = true
-        actInd.centerYAnchor.constraint(equalTo: container.centerYAnchor).isActive = true
+        indicatorBackground.centerXAnchor.constraint(equalTo: container.centerXAnchor).isActive = true
+        indicatorBackground.centerYAnchor.constraint(equalTo: container.centerYAnchor).isActive = true
+        
+        let views = ["actInd": actInd]
+        indicatorBackground.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-[actInd]-|", options: NSLayoutConstraint.FormatOptions(rawValue: 0), metrics: nil, views: views))
+        indicatorBackground.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-[actInd]-|", options: NSLayoutConstraint.FormatOptions(rawValue: 0), metrics: nil, views: views))
     }
     
     func hideActivityIndicator() {
         activityIndicator?.stopAnimating()
-        container?.removeFromSuperview()
-        container = nil
+        activityIndicatorContainer?.removeFromSuperview()
+        activityIndicatorContainer = nil
+        activityIndicator?.removeFromSuperview()
         activityIndicator = nil
+        activityIndicatorBackground?.removeFromSuperview()
+        activityIndicatorBackground = nil
     }
     
     @IBAction func cacheAllActivitiesButtonPressed(_ sender: Any) {
