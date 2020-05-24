@@ -45,7 +45,8 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         }
         do {
             let data = try Data(contentsOf: LoginViewController.activityCacheFullPath, options: .mappedIfSafe)
-            let jsonResult = try JSONSerialization.jsonObject(with: data, options: .mutableLeaves)
+            let decoder = JSONDecoder()
+            cached = try decoder.decode([Activity].self, from: data)
         } catch {
             return cached
         }
@@ -70,6 +71,6 @@ class MapViewController: UIViewController, MKMapViewDelegate {
             return startVisible || endVisible
         }
         
-        print("visibleActivities: \(visibleActivities)")
+        print("visibleActivities: \(visibleActivities.count)")
     }
 }
