@@ -178,6 +178,8 @@ final class LoginViewController: UIViewController {
         activityIndicatorBackground = nil
     }
     
+    let activityCacheContainerPath: URL = LoginViewController.getDocumentsDirectory().appendingPathComponent("allActivities")
+    lazy var activityCacheFullPath: URL = activityCacheContainerPath.appendingPathComponent("all.saved")
     @IBAction func cacheAllActivitiesButtonPressed(_ sender: Any) {
         showActivityIndicatory(uiView: self.view)
         StravaAPIClient.sharedInstance.listAllActivities(completion: {  (allActivities: [Activity], error: Error?) in
@@ -189,13 +191,10 @@ final class LoginViewController: UIViewController {
                 return
             }
 
-            let containerPath = LoginViewController.getDocumentsDirectory().appendingPathComponent("allActivities")
-            let fullPath = containerPath.appendingPathComponent("all.saved")
-
             do {
-                try FileManager.default.createDirectory(at: containerPath, withIntermediateDirectories: true, attributes: nil)
+                try FileManager.default.createDirectory(at: self.activityCacheContainerPath, withIntermediateDirectories: true, attributes: nil)
                 let data = try JSONEncoder().encode(allActivities)
-                try data.write(to: fullPath)
+                try data.write(to: self.activityCacheFullPath)
             } catch {
                 print("Couldn't write file")
             }
