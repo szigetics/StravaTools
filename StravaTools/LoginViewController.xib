@@ -34,8 +34,8 @@
                     </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="u50-NM-z3D">
-                    <rect key="frame" x="162" y="140" width="90" height="30"/>
-                    <state key="normal" title="List activities"/>
+                    <rect key="frame" x="118.5" y="140" width="177" height="30"/>
+                    <state key="normal" title="List first page of activities"/>
                     <connections>
                         <action selector="listActivitiesButtonPressed:" destination="-1" eventType="touchUpInside" id="hyh-Z9-NTd"/>
                     </connections>
@@ -47,11 +47,20 @@
                         <action selector="logOutButtonPressed:" destination="-1" eventType="touchUpInside" id="aVy-2h-GQ5"/>
                     </connections>
                 </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lmY-dv-9Ib">
+                    <rect key="frame" x="144.5" y="178" width="125" height="30"/>
+                    <state key="normal" title="Cache all activites"/>
+                    <connections>
+                        <action selector="cacheAllActivitiesButtonPressed:" destination="-1" eventType="touchUpInside" id="RDU-r4-4of"/>
+                    </connections>
+                </button>
             </subviews>
             <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
             <constraints>
                 <constraint firstItem="u50-NM-z3D" firstAttribute="centerX" secondItem="fnl-2z-Ty3" secondAttribute="centerX" id="5ub-AW-Ylo"/>
+                <constraint firstItem="lmY-dv-9Ib" firstAttribute="top" secondItem="u50-NM-z3D" secondAttribute="bottom" constant="8" id="6Hg-KM-4Fc"/>
                 <constraint firstItem="fnl-2z-Ty3" firstAttribute="bottom" secondItem="6SA-ps-g9b" secondAttribute="bottom" id="DfL-W4-7BU"/>
+                <constraint firstItem="lmY-dv-9Ib" firstAttribute="centerX" secondItem="fnl-2z-Ty3" secondAttribute="centerX" id="Kns-v4-STQ"/>
                 <constraint firstItem="Kc7-hU-0f9" firstAttribute="centerX" secondItem="fnl-2z-Ty3" secondAttribute="centerX" id="MTa-3E-8MG"/>
                 <constraint firstItem="Kc7-hU-0f9" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" constant="20" id="NLa-AY-DYo"/>
                 <constraint firstItem="6SA-ps-g9b" firstAttribute="centerX" secondItem="fnl-2z-Ty3" secondAttribute="centerX" id="SrV-To-BlL"/>

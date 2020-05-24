@@ -106,6 +106,75 @@ final class LoginViewController: UIViewController {
         }
     }
     
+    private static func getDocumentsDirectory() -> URL {
+        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+        return paths[0]
+    }
+    
+    var activityIndicator: UIActivityIndicatorView? = nil
+    var container: UIView? = nil //blocking touches meanwhile `activityIndicator` is visible
+    
+    func showActivityIndicatory(uiView: UIView) {
+        container = UIView()
+        guard let container = container else {
+            return
+        }
+        container.translatesAutoresizingMaskIntoConstraints = false
+        container.backgroundColor = UIColor.white.withAlphaComponent(0.3)
+
+        activityIndicator = UIActivityIndicatorView()
+        guard let actInd = activityIndicator else {
+            return
+        }
+        actInd.translatesAutoresizingMaskIntoConstraints = false
+        actInd.style = UIActivityIndicatorView.Style.large
+        actInd.color = UIColor.gray
+        actInd.startAnimating()
+        
+        container.addSubview(actInd)
+        uiView.addSubview(container)
+        
+        //container fills the view
+        container.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        container.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        container.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
+        container.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
+        
+        actInd.centerXAnchor.constraint(equalTo: container.centerXAnchor).isActive = true
+        actInd.centerYAnchor.constraint(equalTo: container.centerYAnchor).isActive = true
+    }
+    
+    func hideActivityIndicator() {
+        activityIndicator?.stopAnimating()
+        container?.removeFromSuperview()
+        container = nil
+        activityIndicator = nil
+    }
+    
+    @IBAction func cacheAllActivitiesButtonPressed(_ sender: Any) {
+        showActivityIndicatory(uiView: self.view)
+//        StravaAPIClient.sharedInstance.listAllActivities(completion: {  (allActivities: [Activity], error: Error?) in
+//            self.hideActivityIndicator()
+//            self.updateLogInLogOutButtonsState()
+//
+//            if error != nil {
+//                self.showResult("Error", String(describing: error))
+//                return
+//            }
+//
+//            let fullPath = LoginViewController.getDocumentsDirectory().appendingPathComponent("allActivities").appendingPathComponent("all.saved")
+//
+//            do {
+//                let data = try NSKeyedArchiver.archivedData(withRootObject: allActivities, requiringSecureCoding: false)
+//                try data.write(to: fullPath)
+//            } catch {
+//                print("Couldn't write file")
+//            }
+//        }) { (count) in
+//            print("number of activities loaded so far : \(count)")
+//
+//        }
+    }
 }
 
 extension LoginViewController: UIViewControllerRepresentable {
