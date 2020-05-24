@@ -104,12 +104,14 @@ class StravaAPIClient {
     }
     
     typealias ListActivitiesCallback = (_ activities: [Activity], _ error: Error?) -> Void
-    func listActivities(page: Int = 1, completion: @escaping ListActivitiesCallback) {
+    func listActivities(page: Int = 1,
+                        per_page: Int = 30, //30 is the Strava API default value
+                        completion: @escaping ListActivitiesCallback) {
         //Note : OAuth2DataLoader fails to parse the JSON so we use Alamofire instead to send the request and process the response
         let url = base.appendingPathComponent("athlete/activities")
         
         let interceptor = OAuth2RetryHandler(oauth)
-        AF.request(url, method: .get, parameters: [ "page": "\(page)" ], interceptor: interceptor)
+        AF.request(url, method: .get, parameters: [ "page": "\(page)", "per_page": "\(per_page)" ], interceptor: interceptor)
             .validate()
             .response { response in
                 switch response.result {
@@ -134,5 +136,36 @@ class StravaAPIClient {
                     completion([], NSError(domain:"", code:3, userInfo:nil))
                 }
         }
+    }
+    
+    typealias ListAllActivitiesProgressCallback = (_ numberOfDownloadedActivities: Int) -> Void
+    func listAllActivities(completion: @escaping ListActivitiesCallback, progress: @escaping ListAllActivitiesProgressCallback) {
+        let maxAllowedPerPageValue = 200
+        
+        var page = 0
+        var allActivities: [Activity] = []
+        
+        var requestNextPage: (() -> Void)!
+        requestNextPage = { [weak self] in
+            guard let self = self else { return }
+            page += 1
+            self.listActivities(page: page, per_page: maxAllowedPerPageValue) {  (activities: [Activity], error: Error?) in
+                if error != nil {
+                    completion(allActivities, error)
+                    return
+                }
+                
+                if activities.count > 0 {
+                    allActivities.append(contentsOf: activities)
+                    progress(allActivities.count)
+                    print("loading more pages...")
+                    requestNextPage()
+                } else {
+                    print("no more pages")
+                    completion(allActivities, error)
+                }
+            }
+        }
+        requestNextPage()
     }
 }
