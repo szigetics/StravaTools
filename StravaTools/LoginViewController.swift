@@ -189,10 +189,12 @@ final class LoginViewController: UIViewController {
                 return
             }
 
-            let fullPath = LoginViewController.getDocumentsDirectory().appendingPathComponent("allActivities").appendingPathComponent("all.saved")
+            let containerPath = LoginViewController.getDocumentsDirectory().appendingPathComponent("allActivities")
+            let fullPath = containerPath.appendingPathComponent("all.saved")
 
             do {
-                let data = try NSKeyedArchiver.archivedData(withRootObject: allActivities, requiringSecureCoding: false)
+                try FileManager.default.createDirectory(at: containerPath, withIntermediateDirectories: true, attributes: nil)
+                let data = try JSONEncoder().encode(allActivities)
                 try data.write(to: fullPath)
             } catch {
                 print("Couldn't write file")
