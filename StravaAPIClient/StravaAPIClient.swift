@@ -172,6 +172,47 @@ class StravaAPIClient {
     
     typealias GetLocationsForActivityWithIDCallback = (_ locations: [CLLocationCoordinate2D], _ error: Error?) -> Void
     func getLocationsForActivityWithID(id: Int, completion: @escaping GetLocationsForActivityWithIDCallback) {
+        let processStreamsArrayJSON = { (data: Data) in
+            guard let streamsArray = try! JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions()) as? [Any], streamsArray.count > 0 else {
+                completion([], NSError(domain:"", code:1, userInfo:nil))
+                return
+            }
+            
+            var found = false
+            for stream in streamsArray {
+                if let dict = stream as? [String: Any],
+                    let type = dict["type"] as? String,
+                    type == "latlng",
+                    let coordData = dict["data"] as? NSArray {
+                    found = true
+                    var result: [CLLocationCoordinate2D] = []
+                    for coord in coordData {
+                        if let coordinate = coord as? NSArray {
+                            if coordinate.count == 2,
+                                let lat = coordinate[0] as? Double,
+                            let lon = coordinate[1] as? Double {
+                                let loc = CLLocationCoordinate2D(latitude: lat, longitude: lon)
+                                result.append(loc)
+                            }
+                        }
+                    }
+                    completion(result, nil)
+                }
+            }
+            if !found {
+                completion([], NSError(domain:"", code:2, userInfo:nil))
+            }
+        }
+        
+        
+        let path = LoginViewController.activityCacheFullPath(id: id)
+        if FileManager.default.fileExists(atPath: path.path) {
+            let data = try! Data(contentsOf: path, options: .mappedIfSafe)
+            
+            processStreamsArrayJSON(data)
+            return
+        }
+        
         //Note : OAuth2DataLoader fails to parse the JSON so we use Alamofire instead to send the request and process the response
         let url = base.appendingPathComponent("activities/\(id)/streams/latlng")
         
@@ -186,37 +227,11 @@ class StravaAPIClient {
                         return
                     }
                     do {
+                        try! FileManager.default.createDirectory(at: LoginViewController.activityCacheContainerPath(id), withIntermediateDirectories: true, attributes: nil)
+                        try! data.write(to: path)
                         print("\(String(describing: String(data: data, encoding: .utf8)))")
                         
-                        guard let streamsArray = try! JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions()) as? [Any], streamsArray.count > 0 else {
-                            completion([], NSError(domain:"", code:1, userInfo:nil))
-                            return
-                        }
-                        
-                        var found = false
-                        for stream in streamsArray {
-                            if let dict = stream as? [String: Any],
-                                let type = dict["type"] as? String,
-                                type == "latlng",
-                                let coordData = dict["data"] as? NSArray {
-                                found = true
-                                var result: [CLLocationCoordinate2D] = []
-                                for coord in coordData {
-                                    if let coordinate = coord as? NSArray {
-                                        if coordinate.count == 2,
-                                            let lat = coordinate[0] as? Double,
-                                        let lon = coordinate[1] as? Double {
-                                            let loc = CLLocationCoordinate2D(latitude: lat, longitude: lon)
-                                            result.append(loc)
-                                        }
-                                    }
-                                }
-                                completion(result, nil)
-                            }
-                        }
-                        if !found {
-                            completion([], NSError(domain:"", code:2, userInfo:nil))
-                        }
+                        processStreamsArrayJSON(data)
                     }
                 case .failure(let error):
                     print("failure \(error)")

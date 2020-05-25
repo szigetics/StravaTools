@@ -178,6 +178,13 @@ final class LoginViewController: UIViewController {
         activityIndicatorBackground = nil
     }
     
+    static func activityCacheContainerPath(_ id: Int) -> URL {
+        return LoginViewController.getDocumentsDirectory().appendingPathComponent("activities").appendingPathComponent("\(id)")
+    }
+    static func activityCacheFullPath(id: Int) -> URL {
+        return activityCacheContainerPath(id).appendingPathComponent("latlng.json")
+    }
+    
     static let allActivitiesCacheContainerPath: URL = LoginViewController.getDocumentsDirectory().appendingPathComponent("allActivities")
     static var allActivitiesCacheFullPath: URL = allActivitiesCacheContainerPath.appendingPathComponent("all.saved")
     @IBAction func cacheAllActivitiesButtonPressed(_ sender: Any) {
