@@ -105,10 +105,11 @@ class MapViewController: UIViewController, MKMapViewDelegate {
             destinationAnnotation.coordinate = location.coordinate
         }
 
-//        mapView.showAnnotations([sourceAnnotation,destinationAnnotation], animated: true )
+        mapView.addAnnotation(sourceAnnotation)
+        mapView.addAnnotation(destinationAnnotation)
         
         let polyline = MKPolyline(coordinates: coordinates, count: coordinates.count)
-//        mapView.addOverlay(polyline, level: MKOverlayLevel.aboveRoads)
+        mapView.addOverlay(polyline, level: MKOverlayLevel.aboveRoads)
     }
     
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
