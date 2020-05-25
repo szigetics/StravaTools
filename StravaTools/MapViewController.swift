@@ -39,12 +39,12 @@ class MapViewController: UIViewController, MKMapViewDelegate {
 
     private lazy var cachedActivities = { () -> [Activity] in
         var cached: [Activity] = []
-        guard FileManager.default.fileExists(atPath: LoginViewController.activityCacheFullPath.path) else {
+        guard FileManager.default.fileExists(atPath: LoginViewController.allActivitiesCacheFullPath.path) else {
             print("Activities not cached yet")
             return cached
         }
         do {
-            let data = try Data(contentsOf: LoginViewController.activityCacheFullPath, options: .mappedIfSafe)
+            let data = try Data(contentsOf: LoginViewController.allActivitiesCacheFullPath, options: .mappedIfSafe)
             let decoder = JSONDecoder()
             cached = try decoder.decode([Activity].self, from: data)
         } catch {
@@ -72,5 +72,49 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         }
         
         print("visibleActivities: \(visibleActivities.count)")
+        
+        guard let firstActivity = visibleActivities.first else {
+            return
+        }
+        
+        StravaAPIClient.sharedInstance.getLocationsForActivityWithID(id: firstActivity.id) { (locations, error) in
+            self.showRouteOnMap(locations)
+        }
+    }
+    
+    func showRouteOnMap(_ coordinates: [CLLocationCoordinate2D]) {
+        guard coordinates.count >= 2,
+            let first = coordinates.first,
+            let last = coordinates.last
+        else {
+            return
+        }
+        
+        let sourcePlacemark = MKPlacemark(coordinate: first, addressDictionary: nil)
+        let destinationPlacemark = MKPlacemark(coordinate: last, addressDictionary: nil)
+
+        let sourceAnnotation = MKPointAnnotation()
+
+        if let location = sourcePlacemark.location {
+            sourceAnnotation.coordinate = location.coordinate
+        }
+
+        let destinationAnnotation = MKPointAnnotation()
+
+        if let location = destinationPlacemark.location {
+            destinationAnnotation.coordinate = location.coordinate
+        }
+
+//        mapView.showAnnotations([sourceAnnotation,destinationAnnotation], animated: true )
+        
+        let polyline = MKPolyline(coordinates: coordinates, count: coordinates.count)
+//        mapView.addOverlay(polyline, level: MKOverlayLevel.aboveRoads)
+    }
+    
+    func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
+        let renderer = MKPolylineRenderer(overlay: overlay)
+        renderer.strokeColor = UIColor(red: 17.0/255.0, green: 147.0/255.0, blue: 255.0/255.0, alpha: 1)
+        renderer.lineWidth = 5.0
+        return renderer
     }
 }

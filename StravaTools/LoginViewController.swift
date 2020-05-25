@@ -178,8 +178,8 @@ final class LoginViewController: UIViewController {
         activityIndicatorBackground = nil
     }
     
-    static let activityCacheContainerPath: URL = LoginViewController.getDocumentsDirectory().appendingPathComponent("allActivities")
-    static var activityCacheFullPath: URL = activityCacheContainerPath.appendingPathComponent("all.saved")
+    static let allActivitiesCacheContainerPath: URL = LoginViewController.getDocumentsDirectory().appendingPathComponent("allActivities")
+    static var allActivitiesCacheFullPath: URL = allActivitiesCacheContainerPath.appendingPathComponent("all.saved")
     @IBAction func cacheAllActivitiesButtonPressed(_ sender: Any) {
         showActivityIndicatory(uiView: self.view)
         StravaAPIClient.sharedInstance.listAllActivities(completion: {  (allActivities: [Activity], error: Error?) in
@@ -192,9 +192,9 @@ final class LoginViewController: UIViewController {
             }
 
             do {
-                try FileManager.default.createDirectory(at: LoginViewController.activityCacheContainerPath, withIntermediateDirectories: true, attributes: nil)
+                try FileManager.default.createDirectory(at: LoginViewController.allActivitiesCacheContainerPath, withIntermediateDirectories: true, attributes: nil)
                 let data = try JSONEncoder().encode(allActivities)
-                try data.write(to: LoginViewController.activityCacheFullPath)
+                try data.write(to: LoginViewController.allActivitiesCacheFullPath)
             } catch {
                 print("Couldn't write file")
             }
@@ -205,7 +205,7 @@ final class LoginViewController: UIViewController {
     }
     
     @IBAction func showOnMapButtonPressed(_ sender: Any) {
-        guard FileManager.default.fileExists(atPath: LoginViewController.activityCacheFullPath.path) else {
+        guard FileManager.default.fileExists(atPath: LoginViewController.allActivitiesCacheFullPath.path) else {
             showResult("Activities not cached yet", "Please cache all activities first!")
             return
         }
