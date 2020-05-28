@@ -293,7 +293,8 @@ extension MapViewController: MKMapViewDelegate {
         
         let btnShow = UIButton(type: .contactAdd)
         let btnOpen = UIButton(type: .detailDisclosure)
-        let stack = UIStackView(arrangedSubviews: [btnShow, btnOpen])
+        let btnCreateGpx = UIButton(type: .close)
+        let stack = UIStackView(arrangedSubviews: [btnShow, btnOpen, btnCreateGpx])
         btnShow.addAction(for: .touchUpInside) { _ in
             StravaAPIClient.sharedInstance.getLocationsForActivityWithID(id: annotation.activity.id) { (locations, error) in
                 self.showRouteOnMap(locations)
@@ -314,6 +315,34 @@ extension MapViewController: MKMapViewDelegate {
                 }
             } else {
                 openInBrowser()
+            }
+        }
+        btnCreateGpx.addAction(for: .touchUpInside) { _ in
+            StravaAPIClient.sharedInstance.getLocationsForActivityWithID(id: annotation.activity.id) { (locations, error) in
+                let fileName = "\(annotation.activity.id).GPX"
+                let path = NSURL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(fileName)
+                var gpxText : String = String("<?xml version=\"1.0\" encoding=\"UTF-8\"?><gpx version=\"1.1\" creator=\"yourAppNameHere\" xmlns=\"http://www.topografix.com/GPX/1/1\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:gte=\"http://www.gpstrackeditor.com/xmlschemas/General/1\" xsi:schemaLocation=\"http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd\">")
+                gpxText.append("<trk><trkseg>")
+                for location in locations{
+                    //                            let abc = CLLocation(coordinate: <#T##CLLocationCoordinate2D#>, altitude: <#T##CLLocationDistance#>, horizontalAccuracy: 1, verticalAccuracy: 1, timestamp: Date())
+                    
+                    //                            let newLine : String = String("<trkpt lat=\"\(String(format:"%.6f", location.latitude))\" lon=\"\(String(format:"%.6f", location.longitude))\"><ele>\(locations.al)</ele><time>\(String(describing: locations.locTimestamp!))</time></trkpt>")
+                    
+                    let newLine : String = String("<trkpt lat=\"\(String(format:"%.6f", location.latitude))\" lon=\"\(String(format:"%.6f", location.longitude))\"></trkpt>")
+                    gpxText.append(contentsOf: newLine)
+                }
+                gpxText.append("</trkseg></trk></gpx>")
+                do {
+                    try gpxText.write(to: path!, atomically: true, encoding: String.Encoding.utf8)
+                    
+                    let vc = UIActivityViewController(activityItems: [path!], applicationActivities: [])
+                    
+                    self.present(vc, animated: true, completion: nil)
+                    
+                } catch {
+                    print("Failed to create file")
+                    print("\(error)")
+                }
             }
         }
         result!.detailCalloutAccessoryView = stack
