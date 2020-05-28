@@ -12,7 +12,7 @@ import MapKit
 class ActivityAnnotation: NSObject, Decodable, MKAnnotation {
     
     enum ActivityAnnotationType: Int, Decodable {
-//        case run
+        case run
         case bicycle
 //        case other
     }
@@ -36,7 +36,7 @@ class ActivityAnnotation: NSObject, Decodable, MKAnnotation {
     }
 }
 
-private let multiWheelCycleClusterID = "multiWheelCycle"
+private let activityClusterID = "activityClusterID"
 
 /// - Tag: BicycleAnnotationView
 class BicycleAnnotationView: MKMarkerAnnotationView {
@@ -45,7 +45,7 @@ class BicycleAnnotationView: MKMarkerAnnotationView {
     
     override init(annotation: MKAnnotation?, reuseIdentifier: String?) {
         super.init(annotation: annotation, reuseIdentifier: reuseIdentifier)
-        clusteringIdentifier = multiWheelCycleClusterID
+        clusteringIdentifier = activityClusterID
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -58,6 +58,29 @@ class BicycleAnnotationView: MKMarkerAnnotationView {
         displayPriority = .defaultHigh
         markerTintColor = UIColor.bicycleColor
         glyphImage = #imageLiteral(resourceName: "bicycle")
+    }
+}
+
+/// - Tag: RunAnnotationView
+class RunAnnotationView: MKMarkerAnnotationView {
+
+    static let ReuseID = "runAnnotation"
+    
+    override init(annotation: MKAnnotation?, reuseIdentifier: String?) {
+        super.init(annotation: annotation, reuseIdentifier: reuseIdentifier)
+        clusteringIdentifier = activityClusterID
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    /// - Tag: DisplayConfiguration
+    override func prepareForDisplay() {
+        super.prepareForDisplay()
+        displayPriority = .defaultHigh
+        markerTintColor = UIColor.bicycleColor
+        glyphImage = #imageLiteral(resourceName: "run")
     }
 }
 
@@ -85,6 +108,7 @@ class MapViewController: UIViewController {
     
     private func registerAnnotationViewClasses() {
         mapView.register(BicycleAnnotationView.self, forAnnotationViewWithReuseIdentifier: MKMapViewDefaultAnnotationViewReuseIdentifier)
+        mapView.register(RunAnnotationView.self, forAnnotationViewWithReuseIdentifier: MKMapViewDefaultAnnotationViewReuseIdentifier)
     }
     
     private func showStartPointsOnMap() {
@@ -105,6 +129,8 @@ class MapViewController: UIViewController {
                 switch type {
                 case .bicycle:
                     return "Ride"
+                case .run:
+                    return "Run"
                 }
             }()
             
@@ -117,7 +143,7 @@ class MapViewController: UIViewController {
         }
         
         addAnnotationsForActivityType(.bicycle)
-//        addAnnotationsForActivityType(.run)
+        addAnnotationsForActivityType(.run)
     }
     
     private static func coordinateInRegion(_ coord: CLLocationCoordinate2D, _ region: MKCoordinateRegion) -> Bool {
@@ -221,6 +247,8 @@ extension MapViewController: MKMapViewDelegate {
         switch annotation.type {
         case .bicycle:
             return BicycleAnnotationView(annotation: annotation, reuseIdentifier: BicycleAnnotationView.ReuseID)
+        case .run:
+            return RunAnnotationView(annotation: annotation, reuseIdentifier: RunAnnotationView.ReuseID)
         }
     }
 }
