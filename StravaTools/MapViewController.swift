@@ -291,13 +291,19 @@ extension MapViewController: MKMapViewDelegate {
             result = RunAnnotationView(annotation: annotation, reuseIdentifier: RunAnnotationView.ReuseID)
         }
         
-        let btn = UIButton(type: .detailDisclosure)
-        btn.addAction(for: .touchUpInside) { _ in
+        let btnShow = UIButton(type: .contactAdd)
+        let btnOpen = UIButton(type: .detailDisclosure)
+        let stack = UIStackView(arrangedSubviews: [btnShow, btnOpen])
+        btnShow.addAction(for: .touchUpInside) { _ in
             StravaAPIClient.sharedInstance.getLocationsForActivityWithID(id: annotation.activity.id) { (locations, error) in
                 self.showRouteOnMap(locations)
             }
         }
-        result!.detailCalloutAccessoryView = btn
+        btnOpen.addAction(for: .touchUpInside) { _ in
+            guard let url = URL(string: "https://www.strava.com/activities/\(annotation.activity.id)") else { return }
+            UIApplication.shared.open(url, completionHandler: nil)
+        }
+        result!.detailCalloutAccessoryView = stack
         result!.canShowCallout = true
         
         return result!
