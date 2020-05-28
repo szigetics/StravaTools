@@ -9,7 +9,59 @@
 import UIKit
 import MapKit
 
-class MapViewController: UIViewController, MKMapViewDelegate {
+class ActivityAnnotation: NSObject, Decodable, MKAnnotation {
+    
+    enum ActivityAnnotationType: Int, Decodable {
+//        case run
+        case bicycle
+//        case other
+    }
+    
+    var type: ActivityAnnotationType = .bicycle
+    
+    private var latitude: CLLocationDegrees = 0
+    private var longitude: CLLocationDegrees = 0
+    
+    // This property must be key-value observable, which the `@objc dynamic` attributes provide.
+    @objc dynamic var coordinate: CLLocationCoordinate2D {
+        get {
+            return CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
+        }
+        set {
+            // For most uses, `coordinate` can be a standard property declaration without the customized getter and setter shown here.
+            // The custom getter and setter are needed in this case because of how it loads data from the `Decodable` protocol.
+            latitude = newValue.latitude
+            longitude = newValue.longitude
+        }
+    }
+}
+
+private let multiWheelCycleClusterID = "multiWheelCycle"
+
+/// - Tag: BicycleAnnotationView
+class BicycleAnnotationView: MKMarkerAnnotationView {
+
+    static let ReuseID = "bicycleAnnotation"
+    
+    override init(annotation: MKAnnotation?, reuseIdentifier: String?) {
+        super.init(annotation: annotation, reuseIdentifier: reuseIdentifier)
+        clusteringIdentifier = multiWheelCycleClusterID
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    /// - Tag: DisplayConfiguration
+    override func prepareForDisplay() {
+        super.prepareForDisplay()
+        displayPriority = .defaultHigh
+        markerTintColor = UIColor.bicycleColor
+        glyphImage = #imageLiteral(resourceName: "bicycle")
+    }
+}
+
+class MapViewController: UIViewController {
 
     private var mapView = MKMapView()
     
@@ -25,6 +77,47 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         mapView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
         
         mapView.delegate = self
+        
+        registerAnnotationViewClasses()
+        
+        showStartPointsOnMap()
+    }
+    
+    private func registerAnnotationViewClasses() {
+        mapView.register(BicycleAnnotationView.self, forAnnotationViewWithReuseIdentifier: MKMapViewDefaultAnnotationViewReuseIdentifier)
+    }
+    
+    private func showStartPointsOnMap() {
+        let addAnnotationForActivity = { (activity: Activity, type: ActivityAnnotation.ActivityAnnotationType) in
+            guard let start_latlng = activity.start_latlng else {
+                return
+            }
+            let startLoc = CLLocationCoordinate2D(latitude: CLLocationDegrees(start_latlng[0]), longitude: CLLocationDegrees(start_latlng[1]))
+            
+            let startAnnotation = ActivityAnnotation()
+            startAnnotation.coordinate = startLoc
+            startAnnotation.type = type
+            self.mapView.addAnnotation(startAnnotation)
+        }
+        
+        let addAnnotationsForActivityType = { (type: ActivityAnnotation.ActivityAnnotationType) in
+            let stringForActivityType: String = {
+                switch type {
+                case .bicycle:
+                    return "Ride"
+                }
+            }()
+            
+            let activitiesWithType = self.cachedActivities.filter { (activity) -> Bool in
+                return activity.type == stringForActivityType
+            }
+            activitiesWithType.forEach { (activity) in
+                addAnnotationForActivity(activity, type)
+            }
+        }
+        
+        addAnnotationsForActivityType(.bicycle)
+//        addAnnotationsForActivityType(.run)
     }
     
     private static func coordinateInRegion(_ coord: CLLocationCoordinate2D, _ region: MKCoordinateRegion) -> Bool {
@@ -52,70 +145,82 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         }
         return cached
     }()
+}
+
+extension MapViewController: MKMapViewDelegate {
+
+//    func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
+//        //get activities for currently visible map region
+//        let visibleActivities = cachedActivities.filter { (activity) -> Bool in
+//            var startVisible = false
+//            if let start_latlng = activity.start_latlng {
+//                let startLoc = CLLocationCoordinate2D(latitude: CLLocationDegrees(start_latlng[0]), longitude: CLLocationDegrees(start_latlng[1]))
+//                startVisible = MapViewController.coordinateInRegion(startLoc, mapView.region)
+//            }
+//
+//            var endVisible = false
+//            if let end_latlng = activity.end_latlng {
+//                let endLoc = CLLocationCoordinate2D(latitude: CLLocationDegrees(end_latlng[0]), longitude: CLLocationDegrees(end_latlng[1]))
+//                endVisible = MapViewController.coordinateInRegion(endLoc, mapView.region)
+//            }
+//
+//            return startVisible || endVisible
+//        }
+//
+//        print("visibleActivities: \(visibleActivities.count)")
+//
+//        guard let firstActivity = visibleActivities.first else {
+//            return
+//        }
+//
+//        StravaAPIClient.sharedInstance.getLocationsForActivityWithID(id: firstActivity.id) { (locations, error) in
+//            self.showRouteOnMap(locations)
+//        }
+//    }
     
-    func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
-        //get activities for currently visible map region
-        let visibleActivities = cachedActivities.filter { (activity) -> Bool in
-            var startVisible = false
-            if let start_latlng = activity.start_latlng {
-                let startLoc = CLLocationCoordinate2D(latitude: CLLocationDegrees(start_latlng[0]), longitude: CLLocationDegrees(start_latlng[1]))
-                startVisible = MapViewController.coordinateInRegion(startLoc, mapView.region)
-            }
-            
-            var endVisible = false
-            if let end_latlng = activity.end_latlng {
-                let endLoc = CLLocationCoordinate2D(latitude: CLLocationDegrees(end_latlng[0]), longitude: CLLocationDegrees(end_latlng[1]))
-                endVisible = MapViewController.coordinateInRegion(endLoc, mapView.region)
-            }
-            
-            return startVisible || endVisible
-        }
-        
-        print("visibleActivities: \(visibleActivities.count)")
-        
-        guard let firstActivity = visibleActivities.first else {
-            return
-        }
-        
-        StravaAPIClient.sharedInstance.getLocationsForActivityWithID(id: firstActivity.id) { (locations, error) in
-            self.showRouteOnMap(locations)
-        }
-    }
+//    func showRouteOnMap(_ coordinates: [CLLocationCoordinate2D]) {
+//        guard coordinates.count >= 2,
+//            let first = coordinates.first,
+//            let last = coordinates.last
+//            else {
+//                return
+//        }
+//
+//        let sourcePlacemark = MKPlacemark(coordinate: first, addressDictionary: nil)
+//        let destinationPlacemark = MKPlacemark(coordinate: last, addressDictionary: nil)
+//
+//        let sourceAnnotation = MKPointAnnotation()
+//
+//        if let location = sourcePlacemark.location {
+//            sourceAnnotation.coordinate = location.coordinate
+//        }
+//
+//        let destinationAnnotation = MKPointAnnotation()
+//
+//        if let location = destinationPlacemark.location {
+//            destinationAnnotation.coordinate = location.coordinate
+//        }
+//
+//        mapView.addAnnotation(sourceAnnotation)
+//        mapView.addAnnotation(destinationAnnotation)
+//
+//        let polyline = MKPolyline(coordinates: coordinates, count: coordinates.count)
+//        mapView.addOverlay(polyline, level: MKOverlayLevel.aboveRoads)
+//    }
     
-    func showRouteOnMap(_ coordinates: [CLLocationCoordinate2D]) {
-        guard coordinates.count >= 2,
-            let first = coordinates.first,
-            let last = coordinates.last
-        else {
-            return
-        }
-        
-        let sourcePlacemark = MKPlacemark(coordinate: first, addressDictionary: nil)
-        let destinationPlacemark = MKPlacemark(coordinate: last, addressDictionary: nil)
-
-        let sourceAnnotation = MKPointAnnotation()
-
-        if let location = sourcePlacemark.location {
-            sourceAnnotation.coordinate = location.coordinate
-        }
-
-        let destinationAnnotation = MKPointAnnotation()
-
-        if let location = destinationPlacemark.location {
-            destinationAnnotation.coordinate = location.coordinate
-        }
-
-        mapView.addAnnotation(sourceAnnotation)
-        mapView.addAnnotation(destinationAnnotation)
-        
-        let polyline = MKPolyline(coordinates: coordinates, count: coordinates.count)
-        mapView.addOverlay(polyline, level: MKOverlayLevel.aboveRoads)
-    }
+//    func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
+//        let renderer = MKPolylineRenderer(overlay: overlay)
+//        renderer.strokeColor = UIColor(red: 17.0/255.0, green: 147.0/255.0, blue: 255.0/255.0, alpha: 1)
+//        renderer.lineWidth = 5.0
+//        return renderer
+//    }
     
-    func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
-        let renderer = MKPolylineRenderer(overlay: overlay)
-        renderer.strokeColor = UIColor(red: 17.0/255.0, green: 147.0/255.0, blue: 255.0/255.0, alpha: 1)
-        renderer.lineWidth = 5.0
-        return renderer
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        guard let annotation = annotation as? ActivityAnnotation else { return nil }
+
+        switch annotation.type {
+        case .bicycle:
+            return BicycleAnnotationView(annotation: annotation, reuseIdentifier: BicycleAnnotationView.ReuseID)
+        }
     }
 }

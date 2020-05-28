@@ -25,6 +25,7 @@
 		9908F53E246FF12900ECF7D3 /* OAuth2RetryHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9908F53D246FF12900ECF7D3 /* OAuth2RetryHandler.swift */; };
 		9908F541246FF41000ECF7D3 /* Activity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9908F540246FF41000ECF7D3 /* Activity.swift */; };
 		9980D038247B165400D2BE9E /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9980D037247B165400D2BE9E /* MapViewController.swift */; };
+		9980D03A247FB00100D2BE9E /* UIColor+Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9980D039247FB00100D2BE9E /* UIColor+Theme.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -67,6 +68,7 @@
 		9908F53D246FF12900ECF7D3 /* OAuth2RetryHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OAuth2RetryHandler.swift; sourceTree = "<group>"; };
 		9908F540246FF41000ECF7D3 /* Activity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Activity.swift; sourceTree = "<group>"; };
 		9980D037247B165400D2BE9E /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
+		9980D039247FB00100D2BE9E /* UIColor+Theme.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+Theme.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -120,6 +122,7 @@
 		9908F4F8246FDB9F00ECF7D3 /* StravaTools */ = {
 			isa = PBXGroup;
 			children = (
+				9980D039247FB00100D2BE9E /* UIColor+Theme.swift */,
 				9908F4F9246FDB9F00ECF7D3 /* AppDelegate.swift */,
 				9908F4FB246FDB9F00ECF7D3 /* SceneDelegate.swift */,
 				9908F4FD246FDB9F00ECF7D3 /* ContentView.swift */,
@@ -333,6 +336,7 @@
 				9908F4FA246FDB9F00ECF7D3 /* AppDelegate.swift in Sources */,
 				9908F4FC246FDB9F00ECF7D3 /* SceneDelegate.swift in Sources */,
 				9908F541246FF41000ECF7D3 /* Activity.swift in Sources */,
+				9980D03A247FB00100D2BE9E /* UIColor+Theme.swift in Sources */,
 				9908F52B246FDC5F00ECF7D3 /* StravaAPIClient.swift in Sources */,
 				9908F537246FE39F00ECF7D3 /* LoginViewController.swift in Sources */,
 				9908F53E246FF12900ECF7D3 /* OAuth2RetryHandler.swift in Sources */,
