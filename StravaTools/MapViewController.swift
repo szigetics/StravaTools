@@ -300,8 +300,21 @@ extension MapViewController: MKMapViewDelegate {
             }
         }
         btnOpen.addAction(for: .touchUpInside) { _ in
-            guard let url = URL(string: "https://www.strava.com/activities/\(annotation.activity.id)") else { return }
-            UIApplication.shared.open(url, completionHandler: nil)
+            let openInBrowser = {
+                guard let url = URL(string: "https://www.strava.com/activities/\(annotation.activity.id)") else { return }
+                UIApplication.shared.open(url, completionHandler: nil)
+            }
+            
+            guard let url = URL(string: "strava://activities/\(annotation.activity.id)") else { return }
+            if UIApplication.shared.canOpenURL(url) {
+                UIApplication.shared.open(url) { (success) in
+                    if !success {
+                        openInBrowser()
+                    }
+                }
+            } else {
+                openInBrowser()
+            }
         }
         result!.detailCalloutAccessoryView = stack
         result!.canShowCallout = true
