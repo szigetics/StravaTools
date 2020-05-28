@@ -18,9 +18,14 @@ class ActivityAnnotation: NSObject, Decodable, MKAnnotation {
     }
     
     var type: ActivityAnnotationType = .bicycle
+    let activity: Activity
     
     private var latitude: CLLocationDegrees = 0
     private var longitude: CLLocationDegrees = 0
+    
+    init(_ activity: Activity) {
+        self.activity = activity
+    }
     
     // This property must be key-value observable, which the `@objc dynamic` attributes provide.
     @objc dynamic var coordinate: CLLocationCoordinate2D {
@@ -36,7 +41,7 @@ class ActivityAnnotation: NSObject, Decodable, MKAnnotation {
     }
 }
 
-private let activityClusterID = "activityClusterID"
+private let bikeClusterID = "activityClusterID"
 
 /// - Tag: BicycleAnnotationView
 class BicycleAnnotationView: MKMarkerAnnotationView {
@@ -45,7 +50,7 @@ class BicycleAnnotationView: MKMarkerAnnotationView {
     
     override init(annotation: MKAnnotation?, reuseIdentifier: String?) {
         super.init(annotation: annotation, reuseIdentifier: reuseIdentifier)
-        clusteringIdentifier = activityClusterID
+        clusteringIdentifier = bikeClusterID
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -61,6 +66,8 @@ class BicycleAnnotationView: MKMarkerAnnotationView {
     }
 }
 
+private let runClusterID = "activityClusterID"
+
 /// - Tag: RunAnnotationView
 class RunAnnotationView: MKMarkerAnnotationView {
 
@@ -68,7 +75,7 @@ class RunAnnotationView: MKMarkerAnnotationView {
     
     override init(annotation: MKAnnotation?, reuseIdentifier: String?) {
         super.init(annotation: annotation, reuseIdentifier: reuseIdentifier)
-        clusteringIdentifier = activityClusterID
+        clusteringIdentifier = runClusterID
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -118,7 +125,7 @@ class MapViewController: UIViewController {
             }
             let startLoc = CLLocationCoordinate2D(latitude: CLLocationDegrees(start_latlng[0]), longitude: CLLocationDegrees(start_latlng[1]))
             
-            let startAnnotation = ActivityAnnotation()
+            let startAnnotation = ActivityAnnotation(activity)
             startAnnotation.coordinate = startLoc
             startAnnotation.type = type
             self.mapView.addAnnotation(startAnnotation)
@@ -173,45 +180,55 @@ class MapViewController: UIViewController {
     }()
 }
 
-extension MapViewController: MKMapViewDelegate {
-
-//    func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
-//        //get activities for currently visible map region
-//        let visibleActivities = cachedActivities.filter { (activity) -> Bool in
-//            var startVisible = false
-//            if let start_latlng = activity.start_latlng {
-//                let startLoc = CLLocationCoordinate2D(latitude: CLLocationDegrees(start_latlng[0]), longitude: CLLocationDegrees(start_latlng[1]))
-//                startVisible = MapViewController.coordinateInRegion(startLoc, mapView.region)
-//            }
-//
-//            var endVisible = false
-//            if let end_latlng = activity.end_latlng {
-//                let endLoc = CLLocationCoordinate2D(latitude: CLLocationDegrees(end_latlng[0]), longitude: CLLocationDegrees(end_latlng[1]))
-//                endVisible = MapViewController.coordinateInRegion(endLoc, mapView.region)
-//            }
-//
-//            return startVisible || endVisible
-//        }
-//
-//        print("visibleActivities: \(visibleActivities.count)")
-//
-//        guard let firstActivity = visibleActivities.first else {
-//            return
-//        }
-//
-//        StravaAPIClient.sharedInstance.getLocationsForActivityWithID(id: firstActivity.id) { (locations, error) in
-//            self.showRouteOnMap(locations)
-//        }
-//    }
+extension UIControl {
     
-//    func showRouteOnMap(_ coordinates: [CLLocationCoordinate2D]) {
-//        guard coordinates.count >= 2,
-//            let first = coordinates.first,
-//            let last = coordinates.last
-//            else {
-//                return
-//        }
-//
+    /// Typealias for UIControl closure.
+    public typealias UIControlTargetClosure = (UIControl) -> ()
+    
+    private class UIControlClosureWrapper: NSObject {
+        let closure: UIControlTargetClosure
+        init(_ closure: @escaping UIControlTargetClosure) {
+            self.closure = closure
+        }
+    }
+    
+    private struct AssociatedKeys {
+        static var targetClosure = "targetClosure"
+    }
+    
+    private var targetClosure: UIControlTargetClosure? {
+        get {
+            guard let closureWrapper = objc_getAssociatedObject(self, &AssociatedKeys.targetClosure) as? UIControlClosureWrapper else { return nil }
+            return closureWrapper.closure
+        }
+        set(newValue) {
+            guard let newValue = newValue else { return }
+            objc_setAssociatedObject(self, &AssociatedKeys.targetClosure, UIControlClosureWrapper(newValue), objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        }
+    }
+    
+    @objc func closureAction() {
+        guard let targetClosure = targetClosure else { return }
+        targetClosure(self)
+    }
+    
+    public func addAction(for event: UIControl.Event, closure: @escaping UIControlTargetClosure) {
+        targetClosure = closure
+        addTarget(self, action: #selector(UIControl.closureAction), for: event)
+    }
+    
+}
+
+extension MapViewController: MKMapViewDelegate {
+    
+    func showRouteOnMap(_ coordinates: [CLLocationCoordinate2D]) {
+        guard coordinates.count >= 2,
+            let first = coordinates.first,
+            let last = coordinates.last
+            else {
+                return
+        }
+
 //        let sourcePlacemark = MKPlacemark(coordinate: first, addressDictionary: nil)
 //        let destinationPlacemark = MKPlacemark(coordinate: last, addressDictionary: nil)
 //
@@ -229,26 +246,39 @@ extension MapViewController: MKMapViewDelegate {
 //
 //        mapView.addAnnotation(sourceAnnotation)
 //        mapView.addAnnotation(destinationAnnotation)
-//
-//        let polyline = MKPolyline(coordinates: coordinates, count: coordinates.count)
-//        mapView.addOverlay(polyline, level: MKOverlayLevel.aboveRoads)
-//    }
+
+        let polyline = MKPolyline(coordinates: coordinates, count: coordinates.count)
+        mapView.addOverlay(polyline, level: MKOverlayLevel.aboveRoads)
+    }
     
-//    func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
-//        let renderer = MKPolylineRenderer(overlay: overlay)
-//        renderer.strokeColor = UIColor(red: 17.0/255.0, green: 147.0/255.0, blue: 255.0/255.0, alpha: 1)
-//        renderer.lineWidth = 5.0
-//        return renderer
-//    }
+    func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
+        let renderer = MKPolylineRenderer(overlay: overlay)
+        renderer.strokeColor = UIColor(red: 17.0/255.0, green: 147.0/255.0, blue: 255.0/255.0, alpha: 1)
+        renderer.lineWidth = 5.0
+        return renderer
+    }
     
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         guard let annotation = annotation as? ActivityAnnotation else { return nil }
-
+        
+        var result: MKMarkerAnnotationView? = nil
+        
         switch annotation.type {
         case .bicycle:
-            return BicycleAnnotationView(annotation: annotation, reuseIdentifier: BicycleAnnotationView.ReuseID)
+            result = BicycleAnnotationView(annotation: annotation, reuseIdentifier: BicycleAnnotationView.ReuseID)
         case .run:
-            return RunAnnotationView(annotation: annotation, reuseIdentifier: RunAnnotationView.ReuseID)
+            result = RunAnnotationView(annotation: annotation, reuseIdentifier: RunAnnotationView.ReuseID)
         }
+        
+        let btn = UIButton(type: .detailDisclosure)
+        btn.addAction(for: .touchUpInside) { _ in
+            StravaAPIClient.sharedInstance.getLocationsForActivityWithID(id: annotation.activity.id) { (locations, error) in
+                self.showRouteOnMap(locations)
+            }
+        }
+        result!.detailCalloutAccessoryView = btn
+        result!.canShowCallout = true
+        
+        return result!
     }
 }
