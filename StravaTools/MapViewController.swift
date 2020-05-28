@@ -111,6 +111,27 @@ class MapViewController: UIViewController {
         registerAnnotationViewClasses()
         
         showStartPointsOnMap()
+        
+        let loadAllVisibleButton = UIBarButtonItem(barButtonSystemItem: .play, target: self, action: #selector(loadAllVisibleButtonPressed(_:)))
+        self.navigationItem.rightBarButtonItems = [loadAllVisibleButton]
+    }
+    
+    @objc func loadAllVisibleButtonPressed(_ sender: Any) {
+        let visibleActivities = cachedActivities.filter { (activity) -> Bool in
+            var startVisible = false
+            if let start_latlng = activity.start_latlng {
+                let startLoc = CLLocationCoordinate2D(latitude: CLLocationDegrees(start_latlng[0]), longitude: CLLocationDegrees(start_latlng[1]))
+                startVisible = MapViewController.coordinateInRegion(startLoc, mapView.region)
+            }
+            
+            return startVisible
+        }
+        
+        for visibleActivity in visibleActivities {
+            StravaAPIClient.sharedInstance.getLocationsForActivityWithID(id: visibleActivity.id) { (locations, error) in
+                self.showRouteOnMap(locations)
+            }
+        }
     }
     
     private func registerAnnotationViewClasses() {
