@@ -11,13 +11,13 @@ import MapKit
 
 class ActivityAnnotation: NSObject, Decodable, MKAnnotation {
     
-    enum ActivityAnnotationType: Int, Decodable {
-        case run
-        case bicycle
+    enum ActivityAnnotationType: String, Decodable {
+        case Run
+        case Ride
 //        case other
     }
     
-    var type: ActivityAnnotationType = .bicycle
+    var type: ActivityAnnotationType = .Ride
     let activity: Activity
     
     private var latitude: CLLocationDegrees = 0
@@ -153,25 +153,16 @@ class MapViewController: UIViewController {
         }
         
         let addAnnotationsForActivityType = { (type: ActivityAnnotation.ActivityAnnotationType) in
-            let stringForActivityType: String = {
-                switch type {
-                case .bicycle:
-                    return "Ride"
-                case .run:
-                    return "Run"
-                }
-            }()
-            
             let activitiesWithType = self.cachedActivities.filter { (activity) -> Bool in
-                return activity.type == stringForActivityType
+                return activity.type == type.rawValue
             }
             activitiesWithType.forEach { (activity) in
                 addAnnotationForActivity(activity, type)
             }
         }
         
-        addAnnotationsForActivityType(.bicycle)
-        addAnnotationsForActivityType(.run)
+        addAnnotationsForActivityType(.Run)
+        addAnnotationsForActivityType(.Ride)
     }
     
     private static func coordinateInRegion(_ coord: CLLocationCoordinate2D, _ region: MKCoordinateRegion) -> Bool {
@@ -285,9 +276,9 @@ extension MapViewController: MKMapViewDelegate {
         var result: MKMarkerAnnotationView? = nil
         
         switch annotation.type {
-        case .bicycle:
+        case .Ride:
             result = BicycleAnnotationView(annotation: annotation, reuseIdentifier: BicycleAnnotationView.ReuseID)
-        case .run:
+        case .Run:
             result = RunAnnotationView(annotation: annotation, reuseIdentifier: RunAnnotationView.ReuseID)
         }
         
