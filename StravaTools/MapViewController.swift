@@ -19,7 +19,7 @@ class ActivityAnnotation: NSObject, Decodable, MKAnnotation {
 //        case BackcountrySki
 //        case NordicSki
 //        case Snowshoe
-//        case Swim
+        case Swim
 //        case VirtualRide
 //        case Windsurf
 //        case Workout
@@ -125,6 +125,31 @@ class HikeAnnotationView: MKMarkerAnnotationView {
     }
 }
 
+private let swimClusterID = "activityClusterID"
+
+/// - Tag: SwimAnnotationView
+class SwimAnnotationView: MKMarkerAnnotationView {
+
+    static let ReuseID = "swimAnnotation"
+    
+    override init(annotation: MKAnnotation?, reuseIdentifier: String?) {
+        super.init(annotation: annotation, reuseIdentifier: reuseIdentifier)
+        clusteringIdentifier = swimClusterID
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    /// - Tag: DisplayConfiguration
+    override func prepareForDisplay() {
+        super.prepareForDisplay()
+        displayPriority = .defaultHigh
+        markerTintColor = UIColor.bicycleColor
+        glyphImage = #imageLiteral(resourceName: "swim")
+    }
+}
+
 class MapViewController: UIViewController {
 
     private var mapView = MKMapView()
@@ -198,6 +223,7 @@ class MapViewController: UIViewController {
         addAnnotationsForActivityType(.Run)
         addAnnotationsForActivityType(.Ride)
         addAnnotationsForActivityType(.Hike)
+        addAnnotationsForActivityType(.Swim)
     }
     
     private static func coordinateInRegion(_ coord: CLLocationCoordinate2D, _ region: MKCoordinateRegion) -> Bool {
@@ -317,6 +343,8 @@ extension MapViewController: MKMapViewDelegate {
             result = RunAnnotationView(annotation: annotation, reuseIdentifier: RunAnnotationView.ReuseID)
         case .Hike:
             result = HikeAnnotationView(annotation: annotation, reuseIdentifier: HikeAnnotationView.ReuseID)
+        case .Swim:
+            result = SwimAnnotationView(annotation: annotation, reuseIdentifier: SwimAnnotationView.ReuseID)
         }
         
         let btnShow = UIButton(type: .contactAdd)
