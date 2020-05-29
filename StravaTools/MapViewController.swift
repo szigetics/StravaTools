@@ -21,7 +21,7 @@ class ActivityAnnotation: NSObject, Decodable, MKAnnotation {
         case Snowshoe
         case Swim
 //        case VirtualRide
-//        case Windsurf
+        case Windsurf
 //        case Workout
         case Yoga
     }
@@ -250,7 +250,7 @@ class NordicSkiAnnotationView: MKMarkerAnnotationView {
     }
 }
 
-private let snowShowClusterID = "activityClusterID"
+private let snowShoeClusterID = "activityClusterID"
 
 /// - Tag: SnowShoeAnnotationView
 class SnowShoeAnnotationView: MKMarkerAnnotationView {
@@ -259,7 +259,7 @@ class SnowShoeAnnotationView: MKMarkerAnnotationView {
     
     override init(annotation: MKAnnotation?, reuseIdentifier: String?) {
         super.init(annotation: annotation, reuseIdentifier: reuseIdentifier)
-        clusteringIdentifier = snowShowClusterID
+        clusteringIdentifier = snowShoeClusterID
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -272,6 +272,31 @@ class SnowShoeAnnotationView: MKMarkerAnnotationView {
         displayPriority = .defaultHigh
         markerTintColor = UIColor.bicycleColor
         glyphImage = #imageLiteral(resourceName: "snowShoe")
+    }
+}
+
+private let windsurfClusterID = "activityClusterID"
+
+/// - Tag: WindsurfAnnotationView
+class WindsurfAnnotationView: MKMarkerAnnotationView {
+
+    static let ReuseID = "snowShowAnnotation"
+    
+    override init(annotation: MKAnnotation?, reuseIdentifier: String?) {
+        super.init(annotation: annotation, reuseIdentifier: reuseIdentifier)
+        clusteringIdentifier = windsurfClusterID
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    /// - Tag: DisplayConfiguration
+    override func prepareForDisplay() {
+        super.prepareForDisplay()
+        displayPriority = .defaultHigh
+        markerTintColor = UIColor.bicycleColor
+        glyphImage = #imageLiteral(resourceName: "windsurf")
     }
 }
 
@@ -354,6 +379,7 @@ class MapViewController: UIViewController {
         addAnnotationsForActivityType(.BackcountrySki)
         addAnnotationsForActivityType(.NordicSki)
         addAnnotationsForActivityType(.Snowshoe)
+        addAnnotationsForActivityType(.Windsurf)
     }
     
     private static func coordinateInRegion(_ coord: CLLocationCoordinate2D, _ region: MKCoordinateRegion) -> Bool {
@@ -485,6 +511,8 @@ extension MapViewController: MKMapViewDelegate {
             result = NordicSkiAnnotationView(annotation: annotation, reuseIdentifier: NordicSkiAnnotationView.ReuseID)
         case .Snowshoe:
             result = SnowShoeAnnotationView(annotation: annotation, reuseIdentifier: SnowShoeAnnotationView.ReuseID)
+        case .Windsurf:
+            result = WindsurfAnnotationView(annotation: annotation, reuseIdentifier: WindsurfAnnotationView.ReuseID)
         }
         
         let btnShow = UIButton(type: .contactAdd)
