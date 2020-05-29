@@ -14,7 +14,16 @@ class ActivityAnnotation: NSObject, Decodable, MKAnnotation {
     enum ActivityAnnotationType: String, Decodable {
         case Run
         case Ride
-//        case other
+        case Hike
+//        case AlpineSki
+//        case BackcountrySki
+//        case NordicSki
+//        case Snowshoe
+//        case Swim
+//        case VirtualRide
+//        case Windsurf
+//        case Workout
+//        case Yoga
     }
     
     var type: ActivityAnnotationType = .Ride
@@ -91,6 +100,31 @@ class RunAnnotationView: MKMarkerAnnotationView {
     }
 }
 
+private let hikeClusterID = "activityClusterID"
+
+/// - Tag: HikeAnnotationView
+class HikeAnnotationView: MKMarkerAnnotationView {
+
+    static let ReuseID = "hikeAnnotation"
+    
+    override init(annotation: MKAnnotation?, reuseIdentifier: String?) {
+        super.init(annotation: annotation, reuseIdentifier: reuseIdentifier)
+        clusteringIdentifier = hikeClusterID
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    /// - Tag: DisplayConfiguration
+    override func prepareForDisplay() {
+        super.prepareForDisplay()
+        displayPriority = .defaultHigh
+        markerTintColor = UIColor.bicycleColor
+        glyphImage = #imageLiteral(resourceName: "hike")
+    }
+}
+
 class MapViewController: UIViewController {
 
     private var mapView = MKMapView()
@@ -163,6 +197,7 @@ class MapViewController: UIViewController {
         
         addAnnotationsForActivityType(.Run)
         addAnnotationsForActivityType(.Ride)
+        addAnnotationsForActivityType(.Hike)
     }
     
     private static func coordinateInRegion(_ coord: CLLocationCoordinate2D, _ region: MKCoordinateRegion) -> Bool {
@@ -280,6 +315,8 @@ extension MapViewController: MKMapViewDelegate {
             result = BicycleAnnotationView(annotation: annotation, reuseIdentifier: BicycleAnnotationView.ReuseID)
         case .Run:
             result = RunAnnotationView(annotation: annotation, reuseIdentifier: RunAnnotationView.ReuseID)
+        case .Hike:
+            result = HikeAnnotationView(annotation: annotation, reuseIdentifier: HikeAnnotationView.ReuseID)
         }
         
         let btnShow = UIButton(type: .contactAdd)
