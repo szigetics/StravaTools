@@ -18,7 +18,7 @@ class ActivityAnnotation: NSObject, Decodable, MKAnnotation {
         case AlpineSki
         case BackcountrySki
         case NordicSki
-//        case Snowshoe
+        case Snowshoe
         case Swim
 //        case VirtualRide
 //        case Windsurf
@@ -250,6 +250,31 @@ class NordicSkiAnnotationView: MKMarkerAnnotationView {
     }
 }
 
+private let snowShowClusterID = "activityClusterID"
+
+/// - Tag: SnowShoeAnnotationView
+class SnowShoeAnnotationView: MKMarkerAnnotationView {
+
+    static let ReuseID = "snowShowAnnotation"
+    
+    override init(annotation: MKAnnotation?, reuseIdentifier: String?) {
+        super.init(annotation: annotation, reuseIdentifier: reuseIdentifier)
+        clusteringIdentifier = snowShowClusterID
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    /// - Tag: DisplayConfiguration
+    override func prepareForDisplay() {
+        super.prepareForDisplay()
+        displayPriority = .defaultHigh
+        markerTintColor = UIColor.bicycleColor
+        glyphImage = #imageLiteral(resourceName: "snowShoe")
+    }
+}
+
 class MapViewController: UIViewController {
 
     private var mapView = MKMapView()
@@ -328,6 +353,7 @@ class MapViewController: UIViewController {
         addAnnotationsForActivityType(.AlpineSki)
         addAnnotationsForActivityType(.BackcountrySki)
         addAnnotationsForActivityType(.NordicSki)
+        addAnnotationsForActivityType(.Snowshoe)
     }
     
     private static func coordinateInRegion(_ coord: CLLocationCoordinate2D, _ region: MKCoordinateRegion) -> Bool {
@@ -457,6 +483,8 @@ extension MapViewController: MKMapViewDelegate {
             result = BackcountrySkiAnnotationView(annotation: annotation, reuseIdentifier: BackcountrySkiAnnotationView.ReuseID)
         case .NordicSki:
             result = NordicSkiAnnotationView(annotation: annotation, reuseIdentifier: NordicSkiAnnotationView.ReuseID)
+        case .Snowshoe:
+            result = SnowShoeAnnotationView(annotation: annotation, reuseIdentifier: SnowShoeAnnotationView.ReuseID)
         }
         
         let btnShow = UIButton(type: .contactAdd)
