@@ -326,7 +326,7 @@ class MapViewController: UIViewController {
     }
     
     @objc func loadAllVisibleButtonPressed(_ sender: Any) {
-        let visibleActivities = cachedActivities.filter { (activity) -> Bool in
+        var visibleActivities = cachedActivities.filter { (activity) -> Bool in
             var startVisible = false
             if let start_latlng = activity.start_latlng {
                 let startLoc = CLLocationCoordinate2D(latitude: CLLocationDegrees(start_latlng[0]), longitude: CLLocationDegrees(start_latlng[1]))
@@ -336,11 +336,20 @@ class MapViewController: UIViewController {
             return startVisible
         }
         
-        for visibleActivity in visibleActivities {
-            StravaAPIClient.sharedInstance.getLocationsForActivityWithID(id: visibleActivity.id) { (locations, error) in
+        var getLocationsForActivities: (() -> Void)!
+        getLocationsForActivities = {
+            guard let activity = visibleActivities.popLast() else {
+                return
+            }
+            
+            StravaAPIClient.sharedInstance.getLocationsForActivityWithID(id: activity.id) { (locations, error) in
                 self.showRouteOnMap(locations)
+                if error == nil {
+                    getLocationsForActivities()
+                }
             }
         }
+        getLocationsForActivities()
     }
     
     private func registerAnnotationViewClasses() {
