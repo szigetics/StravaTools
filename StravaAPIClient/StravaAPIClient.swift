@@ -254,4 +254,73 @@ class StravaAPIClient {
                 }
         }
     }
+    
+    typealias DetailedActivityCallback = (_ detailedActivity: DetailedActivity?, _ error: Error?) -> Void
+    func getDetailedActivity(activityId: Int,
+                        completion: @escaping DetailedActivityCallback) {
+        //Note : OAuth2DataLoader fails to parse the JSON so we use Alamofire instead to send the request and process the response
+        let url = base.appendingPathComponent("activities/\(activityId)")
+        
+        let interceptor = OAuth2RetryHandler(oauth)
+        AF.request(url, method: .get, parameters: nil, interceptor: interceptor)
+            .validate()
+            .response { response in
+                switch response.result {
+                case .success(let data):
+                    guard let data = data else {
+                        completion(nil, NSError(domain:"", code:1, userInfo:nil))
+                        return
+                    }
+                    do {
+                        print("\(String(describing: String(data: data, encoding: .utf8)))")
+                        
+                        let decoder = JSONDecoder()
+                        let detailedActivity = try decoder.decode(DetailedActivity.self, from: data)
+                        completion(detailedActivity, nil)
+                    } catch {
+                        print("Error with data \(String(describing: String(data: data, encoding: .utf8)))")
+                        print("failure \(error)")
+                        completion(nil, NSError(domain:"", code:2, userInfo:nil))
+                    }
+                case .failure(let error):
+                    print("failure \(error)")
+                    completion(nil, NSError(domain:"", code:3, userInfo:nil))
+                }
+        }
+    }
+    
+    typealias DetailedActivitiesCallback = (_ detailedActivity: [DetailedActivity], _ error: Error?) -> Void
+    func getDetailedActivities(activityIDs: [Int], completion: @escaping DetailedActivitiesCallback) {
+        var allDetailedActivities: [DetailedActivity] = []
+        
+        if activityIDs.count == 0 {
+            completion(allDetailedActivities, nil)
+            return
+        }
+        
+        var remainingActivitiesToRequest = activityIDs
+        var requestNextDetailedActivity: (() -> Void)!
+        requestNextDetailedActivity = { [weak self] in
+            guard let self = self else { return }
+            if let activityToRequest = remainingActivitiesToRequest.popLast() {
+                self.getDetailedActivity(activityId: activityToRequest) { (detailedActivity: DetailedActivity?, error: Error?) in
+                    if error != nil {
+                        completion(allDetailedActivities, error)
+                        return
+                    }
+                    
+                    if let detailedActivity = detailedActivity {
+                        allDetailedActivities.append(detailedActivity)
+                    }
+                    
+                    print("loading next activity details...")
+                    requestNextDetailedActivity()
+                }
+            } else {
+                print("no more activities to request")
+                completion(allDetailedActivities, nil)
+            }
+        }
+        requestNextDetailedActivity()
+    }
 }
