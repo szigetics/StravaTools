@@ -140,7 +140,7 @@ class StravaAPIClient {
     }
     
     typealias ListAllActivitiesProgressCallback = (_ numberOfDownloadedActivities: Int) -> Void
-    func listAllActivities(completion: @escaping ListActivitiesCallback, progress: @escaping ListAllActivitiesProgressCallback) {
+    func listAllActivities(completion: @escaping ListActivitiesCallback, progress: @escaping ListAllActivitiesProgressCallback, reverseUntil: Date? = nil) {
         let maxAllowedPerPageValue = 200
         
         var page = 0
@@ -159,6 +159,21 @@ class StravaAPIClient {
                 if activities.count > 0 {
                     allActivities.append(contentsOf: activities)
                     progress(allActivities.count)
+                    
+                    if let until = reverseUntil {
+                        let minDate = activities.min { (act1, act2) -> Bool in
+                            act1.start_date_local < act2.start_date_local
+                        }
+                        if let minDateUnwr = minDate, minDateUnwr.start_date_local_date() < until {
+                            allActivities = allActivities.filter({ (activity) -> Bool in
+                                activity.start_date_local_date() > until
+                            })
+                            print("requested activities until \(until)")
+                            completion(allActivities, error)
+                            return
+                        }
+                    }
+                    
                     print("loading more pages...")
                     requestNextPage()
                 } else {
