@@ -461,8 +461,8 @@ extension MapViewController: MKMapViewDelegate {
     
     func showRouteOnMap(_ coordinates: [CLLocationCoordinate2D]) {
         guard coordinates.count >= 2,
-            let first = coordinates.first,
-            let last = coordinates.last
+            let _ = coordinates.first,
+            let _ = coordinates.last
             else {
                 return
         }

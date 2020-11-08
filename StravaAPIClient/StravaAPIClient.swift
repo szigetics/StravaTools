@@ -220,7 +220,7 @@ class StravaAPIClient {
         }
         
         
-        let path = LoginViewController.activityCacheFullPath(id: id)
+        let path = LoginViewController.activityCacheFullPath(id: id, type: .LatLngStream)
         if FileManager.default.fileExists(atPath: path.path) {
             let data = try! Data(contentsOf: path, options: .mappedIfSafe)
             
@@ -258,6 +258,29 @@ class StravaAPIClient {
     typealias DetailedActivityCallback = (_ detailedActivity: DetailedActivity?, _ error: Error?) -> Void
     func getDetailedActivity(activityId: Int,
                         completion: @escaping DetailedActivityCallback) {
+        
+        let processDetailedActivityJSON = { (data: Data) in
+            print("\(String(describing: String(data: data, encoding: .utf8)))")
+            
+            let decoder = JSONDecoder()
+            do {
+                let detailedActivity = try decoder.decode(DetailedActivity.self, from: data)
+                completion(detailedActivity, nil)
+            } catch {
+                print("Error with data \(String(describing: String(data: data, encoding: .utf8)))")
+                print("failure \(error)")
+                completion(nil, NSError(domain:"", code:2, userInfo:nil))
+            }
+        }
+        
+        let path = LoginViewController.activityCacheFullPath(id: activityId, type: .DetailedActivity)
+        if FileManager.default.fileExists(atPath: path.path) {
+            let data = try! Data(contentsOf: path, options: .mappedIfSafe)
+            
+            processDetailedActivityJSON(data)
+            return
+        }
+        
         //Note : OAuth2DataLoader fails to parse the JSON so we use Alamofire instead to send the request and process the response
         let url = base.appendingPathComponent("activities/\(activityId)")
         
@@ -271,17 +294,11 @@ class StravaAPIClient {
                         completion(nil, NSError(domain:"", code:1, userInfo:nil))
                         return
                     }
-                    do {
-                        print("\(String(describing: String(data: data, encoding: .utf8)))")
-                        
-                        let decoder = JSONDecoder()
-                        let detailedActivity = try decoder.decode(DetailedActivity.self, from: data)
-                        completion(detailedActivity, nil)
-                    } catch {
-                        print("Error with data \(String(describing: String(data: data, encoding: .utf8)))")
-                        print("failure \(error)")
-                        completion(nil, NSError(domain:"", code:2, userInfo:nil))
-                    }
+                    
+                    try! FileManager.default.createDirectory(at: LoginViewController.activityCacheContainerPath(activityId), withIntermediateDirectories: true, attributes: nil)
+                    try! data.write(to: path)
+                    
+                    processDetailedActivityJSON(data)
                 case .failure(let error):
                     print("failure \(error)")
                     completion(nil, NSError(domain:"", code:3, userInfo:nil))

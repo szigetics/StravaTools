@@ -178,11 +178,16 @@ final class LoginViewController: UIViewController {
         activityIndicatorBackground = nil
     }
     
+    enum CacheType: String {
+        case DetailedActivity
+        case LatLngStream
+    }
+    
     static func activityCacheContainerPath(_ id: Int) -> URL {
         return LoginViewController.getDocumentsDirectory().appendingPathComponent("activities").appendingPathComponent("\(id)")
     }
-    static func activityCacheFullPath(id: Int) -> URL {
-        return activityCacheContainerPath(id).appendingPathComponent("latlng.json")
+    static func activityCacheFullPath(id: Int, type: CacheType) -> URL {
+        return activityCacheContainerPath(id).appendingPathComponent("\(type).json")
     }
     
     static let allActivitiesCacheContainerPath: URL = LoginViewController.getDocumentsDirectory().appendingPathComponent("allActivities")
