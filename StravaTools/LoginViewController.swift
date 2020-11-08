@@ -221,8 +221,10 @@ final class LoginViewController: UIViewController {
     }
     
     @IBAction func showCaloriesBurnt(_ sender: Any) {
+        showActivityIndicatory(uiView: self.view)
         let todayMinus1Month = Calendar.current.date(byAdding: .month, value: -1, to: Date())
         StravaAPIClient.sharedInstance.listAllActivities(completion: { (activities: [Activity], error: Error?) in
+            self.hideActivityIndicator()
             self.updateLogInLogOutButtonsState()
             
             if error != nil {
@@ -233,8 +235,9 @@ final class LoginViewController: UIViewController {
             let countOfActivitiesInTheLast30Days = activities.count
             
             let ids = activities.map { $0.id }
-            StravaAPIClient.sharedInstance.getDetailedActivities(activityIDs: ids) { (detailedActivities: [DetailedActivity], error: Error?) in
-                
+            self.showActivityIndicatory(uiView: self.view)
+            StravaAPIClient.sharedInstance.getDetailedActivities(activityIDs: ids, completion: { (detailedActivities: [DetailedActivity], error: Error?) in
+                self.hideActivityIndicator()
                 let sumCalories = detailedActivities.reduce(0) { $0 + $1.calories }
                 
                 self.showResult("Success", String(describing: activities), {
@@ -244,9 +247,13 @@ final class LoginViewController: UIViewController {
                     
                     self.present(alert, animated: true)
                 })
+            }) { (count) in
+                print("number of activities loaded so far : \(count)")
+                self.activityIndicatorLabel?.text = "Loaded \(count)/\(countOfActivitiesInTheLast30Days) activities..."
             }
-        }, progress: { (progress: Int) in
-            
+        }, progress: { (count) in
+            print("number of activities loaded so far : \(count)")
+            self.activityIndicatorLabel?.text = "Loaded \(count) activities..."
         }, reverseUntil: todayMinus1Month)
     }
     

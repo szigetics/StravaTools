@@ -290,7 +290,8 @@ class StravaAPIClient {
     }
     
     typealias DetailedActivitiesCallback = (_ detailedActivity: [DetailedActivity], _ error: Error?) -> Void
-    func getDetailedActivities(activityIDs: [Int], completion: @escaping DetailedActivitiesCallback) {
+    typealias GetDetailedActivitiesProgressCallback = (_ numberOfRequestedActivities: Int) -> Void
+    func getDetailedActivities(activityIDs: [Int], completion: @escaping DetailedActivitiesCallback, progress: @escaping GetDetailedActivitiesProgressCallback) {
         var allDetailedActivities: [DetailedActivity] = []
         
         if activityIDs.count == 0 {
@@ -312,6 +313,7 @@ class StravaAPIClient {
                     if let detailedActivity = detailedActivity {
                         allDetailedActivities.append(detailedActivity)
                     }
+                    progress(allDetailedActivities.count)
                     
                     print("loading next activity details...")
                     requestNextDetailedActivity()
