@@ -61,6 +61,13 @@
                         <action selector="showOnMapButtonPressed:" destination="-1" eventType="touchUpInside" id="cGp-Zz-dVF"/>
                     </connections>
                 </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jcz-h2-dh7">
+                    <rect key="frame" x="94" y="254" width="226" height="30"/>
+                    <state key="normal" title="Calories burnt in the last 30 days"/>
+                    <connections>
+                        <action selector="showCaloriesBurnt:" destination="-1" eventType="touchUpInside" id="QJI-1X-VDT"/>
+                    </connections>
+                </button>
             </subviews>
             <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
             <constraints>
@@ -68,6 +75,7 @@
                 <constraint firstItem="lmY-dv-9Ib" firstAttribute="top" secondItem="u50-NM-z3D" secondAttribute="bottom" constant="8" id="6Hg-KM-4Fc"/>
                 <constraint firstItem="fnl-2z-Ty3" firstAttribute="bottom" secondItem="6SA-ps-g9b" secondAttribute="bottom" id="DfL-W4-7BU"/>
                 <constraint firstItem="Aus-mp-zK3" firstAttribute="centerX" secondItem="fnl-2z-Ty3" secondAttribute="centerX" id="J94-bp-vUV"/>
+                <constraint firstItem="jcz-h2-dh7" firstAttribute="top" secondItem="Aus-mp-zK3" secondAttribute="bottom" constant="8" id="JZj-L2-RvR"/>
                 <constraint firstItem="lmY-dv-9Ib" firstAttribute="centerX" secondItem="fnl-2z-Ty3" secondAttribute="centerX" id="Kns-v4-STQ"/>
                 <constraint firstItem="Kc7-hU-0f9" firstAttribute="centerX" secondItem="fnl-2z-Ty3" secondAttribute="centerX" id="MTa-3E-8MG"/>
                 <constraint firstItem="Kc7-hU-0f9" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" constant="20" id="NLa-AY-DYo"/>
@@ -75,6 +83,7 @@
                 <constraint firstItem="12O-qc-VFF" firstAttribute="centerX" secondItem="fnl-2z-Ty3" secondAttribute="centerX" id="TBh-fo-ssn"/>
                 <constraint firstItem="12O-qc-VFF" firstAttribute="top" secondItem="Kc7-hU-0f9" secondAttribute="bottom" constant="8" id="Vp8-2h-ity"/>
                 <constraint firstItem="Aus-mp-zK3" firstAttribute="top" secondItem="lmY-dv-9Ib" secondAttribute="bottom" constant="8" id="feh-da-TNy"/>
+                <constraint firstItem="jcz-h2-dh7" firstAttribute="centerX" secondItem="fnl-2z-Ty3" secondAttribute="centerX" id="goC-W8-J0h"/>
                 <constraint firstItem="u50-NM-z3D" firstAttribute="top" secondItem="12O-qc-VFF" secondAttribute="bottom" constant="8" id="na5-Kh-zAn"/>
             </constraints>
             <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>

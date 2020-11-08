@@ -219,6 +219,37 @@ final class LoginViewController: UIViewController {
         
         self.navigationController?.pushViewController(MapViewController(), animated: true)
     }
+    
+    @IBAction func showCaloriesBurnt(_ sender: Any) {
+        let todayMinus1Month = Calendar.current.date(byAdding: .month, value: -1, to: Date())
+        StravaAPIClient.sharedInstance.listAllActivities(completion: { (activities: [Activity], error: Error?) in
+            self.updateLogInLogOutButtonsState()
+            
+            if error != nil {
+                self.showResult("Error", String(describing: error))
+                return
+            }
+            
+            let countOfActivitiesInTheLast30Days = activities.count
+            
+            let ids = activities.map { $0.id }
+            StravaAPIClient.sharedInstance.getDetailedActivities(activityIDs: ids) { (detailedActivities: [DetailedActivity], error: Error?) in
+                
+                let sumCalories = detailedActivities.reduce(0) { $0 + $1.calories }
+                
+                self.showResult("Success", String(describing: activities), {
+                    let alert = UIAlertController(title: "Count of activities", message: "count of activities in the last 30 days : \(countOfActivitiesInTheLast30Days) ; sumCalories : \(sumCalories)", preferredStyle: .alert)
+                    
+                    alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                    
+                    self.present(alert, animated: true)
+                })
+            }
+        }, progress: { (progress: Int) in
+            
+        }, reverseUntil: todayMinus1Month)
+    }
+    
 }
 
 extension LoginViewController: UIViewControllerRepresentable {
