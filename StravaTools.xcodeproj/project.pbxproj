@@ -26,6 +26,7 @@
 		9908F541246FF41000ECF7D3 /* Activity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9908F540246FF41000ECF7D3 /* Activity.swift */; };
 		9980D038247B165400D2BE9E /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9980D037247B165400D2BE9E /* MapViewController.swift */; };
 		9980D03A247FB00100D2BE9E /* UIColor+Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9980D039247FB00100D2BE9E /* UIColor+Theme.swift */; };
+		998D803425586CB100E407FD /* DetailedActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998D803325586CB100E407FD /* DetailedActivity.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -69,6 +70,7 @@
 		9908F540246FF41000ECF7D3 /* Activity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Activity.swift; sourceTree = "<group>"; };
 		9980D037247B165400D2BE9E /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		9980D039247FB00100D2BE9E /* UIColor+Theme.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+Theme.swift"; sourceTree = "<group>"; };
+		998D803325586CB100E407FD /* DetailedActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailedActivity.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -187,6 +189,7 @@
 			isa = PBXGroup;
 			children = (
 				9908F540246FF41000ECF7D3 /* Activity.swift */,
+				998D803325586CB100E407FD /* DetailedActivity.swift */,
 			);
 			path = Serialization;
 			sourceTree = "<group>";
@@ -335,6 +338,7 @@
 			files = (
 				9908F4FA246FDB9F00ECF7D3 /* AppDelegate.swift in Sources */,
 				9908F4FC246FDB9F00ECF7D3 /* SceneDelegate.swift in Sources */,
+				998D803425586CB100E407FD /* DetailedActivity.swift in Sources */,
 				9908F541246FF41000ECF7D3 /* Activity.swift in Sources */,
 				9980D03A247FB00100D2BE9E /* UIColor+Theme.swift in Sources */,
 				9908F52B246FDC5F00ECF7D3 /* StravaAPIClient.swift in Sources */,
