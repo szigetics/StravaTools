@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16096" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -19,60 +21,69 @@
             <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Kc7-hU-0f9">
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Kc7-hU-0f9">
                     <rect key="frame" x="153.5" y="64" width="107" height="30"/>
                     <state key="normal" title="Log in to Strava"/>
                     <connections>
                         <action selector="loginButtonPressed:" destination="-1" eventType="touchUpInside" id="kXx-cR-sQ5"/>
                     </connections>
                 </button>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="12O-qc-VFF">
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="12O-qc-VFF">
                     <rect key="frame" x="154.5" y="102" width="105" height="30"/>
                     <state key="normal" title="Current Athlete"/>
                     <connections>
                         <action selector="currentAthleteButtonPressed:" destination="-1" eventType="touchUpInside" id="yPq-Vg-Ntd"/>
                     </connections>
                 </button>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="u50-NM-z3D">
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="u50-NM-z3D">
                     <rect key="frame" x="118.5" y="140" width="177" height="30"/>
                     <state key="normal" title="List first page of activities"/>
                     <connections>
                         <action selector="listActivitiesButtonPressed:" destination="-1" eventType="touchUpInside" id="hyh-Z9-NTd"/>
                     </connections>
                 </button>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6SA-ps-g9b">
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6SA-ps-g9b">
                     <rect key="frame" x="181" y="832" width="52" height="30"/>
                     <state key="normal" title="Log out"/>
                     <connections>
                         <action selector="logOutButtonPressed:" destination="-1" eventType="touchUpInside" id="aVy-2h-GQ5"/>
                     </connections>
                 </button>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lmY-dv-9Ib">
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lmY-dv-9Ib">
                     <rect key="frame" x="144.5" y="178" width="125" height="30"/>
                     <state key="normal" title="Cache all activites"/>
                     <connections>
                         <action selector="cacheAllActivitiesButtonPressed:" destination="-1" eventType="touchUpInside" id="RDU-r4-4of"/>
                     </connections>
                 </button>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Aus-mp-zK3">
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Aus-mp-zK3">
                     <rect key="frame" x="101" y="216" width="212" height="30"/>
                     <state key="normal" title="Show cached activities on map"/>
                     <connections>
                         <action selector="showOnMapButtonPressed:" destination="-1" eventType="touchUpInside" id="cGp-Zz-dVF"/>
                     </connections>
                 </button>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jcz-h2-dh7">
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jcz-h2-dh7">
                     <rect key="frame" x="94" y="254" width="226" height="30"/>
                     <state key="normal" title="Calories burnt in the last 30 days"/>
                     <connections>
                         <action selector="showCaloriesBurnt:" destination="-1" eventType="touchUpInside" id="QJI-1X-VDT"/>
                     </connections>
                 </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="u9H-Uh-qd1">
+                    <rect key="frame" x="151.5" y="292" width="111" height="30"/>
+                    <state key="normal" title="Cache all routes"/>
+                    <connections>
+                        <action selector="cacheAllRoutesButtonPressed:" destination="-1" eventType="touchUpInside" id="dw8-QH-VDw"/>
+                    </connections>
+                </button>
             </subviews>
-            <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+            <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
+            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
             <constraints>
                 <constraint firstItem="u50-NM-z3D" firstAttribute="centerX" secondItem="fnl-2z-Ty3" secondAttribute="centerX" id="5ub-AW-Ylo"/>
                 <constraint firstItem="lmY-dv-9Ib" firstAttribute="top" secondItem="u50-NM-z3D" secondAttribute="bottom" constant="8" id="6Hg-KM-4Fc"/>
+                <constraint firstItem="u9H-Uh-qd1" firstAttribute="centerX" secondItem="fnl-2z-Ty3" secondAttribute="centerX" id="82s-Bf-UeN"/>
                 <constraint firstItem="fnl-2z-Ty3" firstAttribute="bottom" secondItem="6SA-ps-g9b" secondAttribute="bottom" id="DfL-W4-7BU"/>
                 <constraint firstItem="Aus-mp-zK3" firstAttribute="centerX" secondItem="fnl-2z-Ty3" secondAttribute="centerX" id="J94-bp-vUV"/>
                 <constraint firstItem="jcz-h2-dh7" firstAttribute="top" secondItem="Aus-mp-zK3" secondAttribute="bottom" constant="8" id="JZj-L2-RvR"/>
@@ -85,9 +96,14 @@
                 <constraint firstItem="Aus-mp-zK3" firstAttribute="top" secondItem="lmY-dv-9Ib" secondAttribute="bottom" constant="8" id="feh-da-TNy"/>
                 <constraint firstItem="jcz-h2-dh7" firstAttribute="centerX" secondItem="fnl-2z-Ty3" secondAttribute="centerX" id="goC-W8-J0h"/>
                 <constraint firstItem="u50-NM-z3D" firstAttribute="top" secondItem="12O-qc-VFF" secondAttribute="bottom" constant="8" id="na5-Kh-zAn"/>
+                <constraint firstItem="u9H-Uh-qd1" firstAttribute="top" secondItem="jcz-h2-dh7" secondAttribute="bottom" constant="8" symbolic="YES" id="nvU-xN-tox"/>
             </constraints>
-            <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
             <point key="canvasLocation" x="139" y="137"/>
         </view>
     </objects>
+    <resources>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
 </document>

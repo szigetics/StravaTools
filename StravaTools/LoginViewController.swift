@@ -262,6 +262,11 @@ final class LoginViewController: UIViewController {
         }, reverseUntil: todayMinus1Month)
     }
     
+    
+    @IBAction func cacheAllRoutesButtonPressed(_ sender: Any) {
+        
+    }
+    
 }
 
 extension LoginViewController: UIViewControllerRepresentable {
