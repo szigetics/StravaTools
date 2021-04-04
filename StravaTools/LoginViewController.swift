@@ -263,8 +263,30 @@ final class LoginViewController: UIViewController {
     }
     
     
+    static let allRoutesCacheContainerPath: URL = LoginViewController.getDocumentsDirectory().appendingPathComponent("allRoutes")
+    static var allRoutesCacheFullPath: URL = allRoutesCacheContainerPath.appendingPathComponent("all.saved")
     @IBAction func cacheAllRoutesButtonPressed(_ sender: Any) {
-        
+        showActivityIndicatory(uiView: self.view)
+        StravaAPIClient.sharedInstance.listAllRoutes(completion: {  (allRoutes: [Route], error: Error?) in
+            self.hideActivityIndicator()
+            self.updateLogInLogOutButtonsState()
+
+            if error != nil {
+                self.showResult("Error", String(describing: error))
+                return
+            }
+
+            do {
+                try FileManager.default.createDirectory(at: LoginViewController.allRoutesCacheContainerPath, withIntermediateDirectories: true, attributes: nil)
+                let data = try JSONEncoder().encode(allRoutes)
+                try data.write(to: LoginViewController.allRoutesCacheFullPath)
+            } catch {
+                print("Couldn't write file")
+            }
+        }) { (count) in
+            print("number of routes loaded so far : \(count)")
+            self.activityIndicatorLabel?.text = "Loaded \(count) routes..."
+        }
     }
     
 }

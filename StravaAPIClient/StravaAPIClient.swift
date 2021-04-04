@@ -185,6 +185,85 @@ class StravaAPIClient {
         requestNextPage()
     }
     
+    typealias ListRoutesCallback = (_ routes: [Route], _ error: Error?) -> Void
+    func listRoutes(page: Int = 1,
+                        per_page: Int = 30, //30 is the Strava API default value
+                        completion: @escaping ListRoutesCallback) {
+        currentAthlete { [weak self] (json, error) in
+            if error != nil {
+                completion([], error)
+                return
+            }
+            
+            guard let self = self, let json = json, let athlete_id = json["id"] as? Int else {
+                completion([], NSError(domain: "", code: 1, userInfo: nil))
+                return
+            }
+            
+            //Note : OAuth2DataLoader fails to parse the JSON so we use Alamofire instead to send the request and process the response
+            let url = self.base.appendingPathComponent("athletes/\(athlete_id)/routes")
+            
+            let interceptor = OAuth2RetryHandler(self.oauth)
+            AF.request(url, method: .get, parameters: [ "page": "\(page)", "per_page": "\(per_page)" ], interceptor: interceptor)
+                .validate()
+                .response { response in
+                    switch response.result {
+                    case .success(let data):
+                        guard let data = data else {
+                            completion([], NSError(domain:"", code:1, userInfo:nil))
+                            return
+                        }
+                        do {
+                            print("\(String(describing: String(data: data, encoding: .utf8)))")
+                            
+                            let decoder = JSONDecoder()
+                            let routes = try decoder.decode([Route].self, from: data)
+                            completion(routes, nil)
+                        } catch {
+                            print("Error with data \(String(describing: String(data: data, encoding: .utf8)))")
+                            print("failure \(error)")
+                            completion([], NSError(domain:"", code:2, userInfo:nil))
+                        }
+                    case .failure(let error):
+                        print("failure \(error)")
+                        completion([], NSError(domain:"", code:3, userInfo:nil))
+                    }
+            }
+        }
+    }
+    
+    typealias ListAllRoutesProgressCallback = (_ numberOfDownloadedRoutes: Int) -> Void
+    func listAllRoutes(completion: @escaping ListRoutesCallback, progress: @escaping ListAllRoutesProgressCallback, reverseUntil: Date? = nil) {
+        let maxAllowedPerPageValue = 200
+        
+        var page = 0
+        var allRoutes: [Route] = []
+        
+        var requestNextPage: (() -> Void)!
+        requestNextPage = { [weak self] in
+            guard let self = self else { return }
+            page += 1
+            self.listRoutes(page: page, per_page: maxAllowedPerPageValue) {  (routes: [Route], error: Error?) in
+                if error != nil {
+                    completion(allRoutes, error)
+                    return
+                }
+                
+                if routes.count > 0 {
+                    allRoutes.append(contentsOf: routes)
+                    progress(allRoutes.count)
+                    
+                    print("loading more pages...")
+                    requestNextPage()
+                } else {
+                    print("no more pages")
+                    completion(allRoutes, error)
+                }
+            }
+        }
+        requestNextPage()
+    }
+    
     typealias GetLocationsForActivityWithIDCallback = (_ locations: [CLLocationCoordinate2D], _ error: Error?) -> Void
     func getLocationsForActivityWithID(id: Int, completion: @escaping GetLocationsForActivityWithIDCallback) {
         let processStreamsArrayJSON = { (data: Data) in
